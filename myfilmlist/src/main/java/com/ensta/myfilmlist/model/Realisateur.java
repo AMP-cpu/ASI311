@@ -1,5 +1,6 @@
 package com.ensta.myfilmlist.model;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Realisateur {
@@ -10,6 +11,17 @@ public class Realisateur {
     private List<Film> filmRealises;
     private boolean celebre;
 
+    //constructeurs
+    public Realisateur() {};
+    public Realisateur(long id, String nom, String prenom, LocalDate dateNaissance, boolean celebre) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.dateNaissance = dateNaissance;
+        this.celebre = celebre;
+        this.filmRealises = new ArrayList<Film>();
+
+    }
     // Getters and Setters
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }

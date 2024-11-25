@@ -8,8 +8,7 @@ const Footer = () => {
         <div className="footer-section">
           <h4>About Us</h4>
           <p>
-            We are committed to providing the best services to our users with innovation
-            and excellence at the core.
+            bla bla bla
           </p>
         </div>
         <div className="footer-section">

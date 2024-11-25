@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="34e012ec-8053-40e0-a53b-be56b4f5556e" name="Changes" comment="Projet myfilmlist" />
+    <list default="true" id="34e012ec-8053-40e0-a53b-be56b4f5556e" name="Changes" comment="Projet myfilmlist">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/myfilmlist/src/main/java/com/ensta/myfilmlist/model/Realisateur.java" beforeDir="false" afterPath="$PROJECT_DIR$/myfilmlist/src/main/java/com/ensta/myfilmlist/model/Realisateur.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,13 +41,15 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/KFDM/Downloads/myfilmlist_initial/myfilmlist",
+    "last_opened_file_path": "C:/Users/KFDM/Downloads/myfilmlist_initial/ASI311/myfilmlist",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "MavenSettings",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -64,7 +69,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1731923692345</updated>
-      <workItem from="1731923693426" duration="685000" />
+      <workItem from="1731923693426" duration="1958000" />
     </task>
     <task id="LOCAL-00001" summary="file text">
       <option name="closed" value="true" />
@@ -82,11 +87,30 @@
       <option name="project" value="LOCAL" />
       <updated>1731924222841</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Projet myfilmlist">
+      <option name="closed" value="true" />
+      <created>1731924403543</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1731924403543</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="file text" />

@@ -5,5 +5,6 @@ import java.util.List;
 
 public interface FilmDAO {
     List<Film> findAll();
+    Film save(Film film);
 }
 

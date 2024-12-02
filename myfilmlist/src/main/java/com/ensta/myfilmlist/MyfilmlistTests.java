@@ -1,4 +1,11 @@
 package com.ensta.myfilmlist;
+import java.util.List;
+import com.ensta.myfilmlist.dto.FilmDTO;
+import com.ensta.myfilmlist.service.MyFilmsService;
+import com.ensta.myfilmlist.service.impl.MyFilmsServiceImpl;
+import com.ensta.myfilmlist.service.exception.serviceException;
+
+
 
 /**
  * Classe de tests du service MyFilmsServiceImpl.
@@ -6,7 +13,7 @@ package com.ensta.myfilmlist;
 public class MyfilmlistTests {
 
 	/** Initialisation du service pour les traitements de l'application MyFilms */
-//	private MyFilmsService myFilmsService = new MyFilmsServiceImpl();
+	private MyFilmsService myFilmsService = new MyFilmsServiceImpl();
 
 	/**
 	 * Permet de tester la mise a jour du statut "celebre" d'un RealisateurDTO en fonction du nombre de films realises.
@@ -124,16 +131,16 @@ public class MyfilmlistTests {
 	 * Permet de tester la recuperation des films.
 	 */
 	public void findAllFilmsTest() {
-//		try {
-//			List<FilmDTO> films = myFilmsService.findAllFilms();
-//
-//			// Attendue : 4
-//			System.out.println("Combien y a-t-il de films ? " + films.size());
-//
-//			films.forEach(System.out::println);
-//		} catch (ServiceException e) {
-//			e.printStackTrace();
-//		}
+	try {
+			List<FilmDTO> films = myFilmsService.findAllFilms();
+
+			// Attendue : 4
+			System.out.println("Combien y a-t-il de films ? " + films.size());
+
+			films.forEach(System.out::println);
+		} catch (serviceException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

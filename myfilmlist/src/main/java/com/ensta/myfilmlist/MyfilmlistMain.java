@@ -1,5 +1,5 @@
 package com.ensta.myfilmlist;
-
+import com.ensta.myfilmlist.persistence.ConnectionManager;
 /**
  * Classe principale pour executer un traitement et s'arreter ensuite.
  */
@@ -16,7 +16,7 @@ public class MyfilmlistMain {
 		// MyfilmlistTests myFilmListTests = context.getBean(MyfilmlistTests.class);
 
 		// Demarrage de la base de donnees
-		// ConnectionManager.initDatabase();
+		ConnectionManager.initDatabase();
 		// ConnectionManager.testConnection();
 		// ConnectionManager.createWebServer();
 

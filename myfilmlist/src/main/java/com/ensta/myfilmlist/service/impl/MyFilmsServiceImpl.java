@@ -1,7 +1,9 @@
 package com.ensta.myfilmlist.service.impl;
 
 import com.ensta.myfilmlist.dao.FilmDAO;
+import com.ensta.myfilmlist.dao.RealisateurDAO;
 import com.ensta.myfilmlist.dao.impl.JdbcFilmDAO;
+import com.ensta.myfilmlist.dao.impl.JdbcRealisateurDAO;
 import com.ensta.myfilmlist.dto.FilmDTO;
 import com.ensta.myfilmlist.mapper.FilmMapper;
 import com.ensta.myfilmlist.model.Film;
@@ -11,11 +13,13 @@ import com.ensta.myfilmlist.service.exception.serviceException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class MyFilmsServiceImpl implements MyFilmsService {
 
     // Instanciation de FilmDAO
     private FilmDAO filmDAO = new JdbcFilmDAO();
+    private RealisateurDAO realisateurDAO = new JdbcRealisateurDAO();
 
     @Override
     public Realisateur updateRealisateurCelebre(Realisateur realisateur) throws serviceException {
@@ -47,6 +51,9 @@ public class MyFilmsServiceImpl implements MyFilmsService {
         try {
             // Appelle le DAO pour récupérer tous les films
             List<Film> films = filmDAO.findAll();
+            Optional<Realisateur> realisateur = realisateurDAO.findById(1);
+            List<Realisateur> realisateurs = realisateurDAO.findAll();
+            Realisateur realisateur1 = realisateurDAO.findByNomAndPrenom("Cameron", "James");
 
             // Convertir les objets Film en FilmDTO
             List<FilmDTO> filmDTOs = new ArrayList<>();

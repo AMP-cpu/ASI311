@@ -1,11 +1,21 @@
 package com.ensta.myfilmlist;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import com.ensta.myfilmlist.dto.FilmDTO;
 import com.ensta.myfilmlist.dto.RealisateurDTO;
 import com.ensta.myfilmlist.form.FilmForm;
+import com.ensta.myfilmlist.model.Film;
+import com.ensta.myfilmlist.model.Realisateur;
 import com.ensta.myfilmlist.service.MyFilmsService;
 import com.ensta.myfilmlist.service.impl.MyFilmsServiceImpl;
 import com.ensta.myfilmlist.exception.ServiceException;
+import org.junit.Test;
+
+import static org.hibernate.validator.internal.util.Contracts.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 
@@ -15,118 +25,173 @@ import com.ensta.myfilmlist.exception.ServiceException;
 public class MyfilmlistTests {
 
 	/** Initialisation du service pour les traitements de l'application MyFilms */
+
 	private MyFilmsService myFilmsService = new MyFilmsServiceImpl();
 
 	/**
 	 * Permet de tester la mise a jour du statut "celebre" d'un RealisateurDTO en fonction du nombre de films realises.
 	 */
 	public void updateRealisateurCelebreTest() {
-//		// Creation des Realisateurs
-//
-//		Realisateur jamesCameron = new Realisateur();
-//		jamesCameron.setNom("Cameron");
-//		jamesCameron.setPrenom("James");
-//		jamesCameron.setDateNaissance(LocalDate.of(1954, 8, 16));
-//
-//		Realisateur peterJackson = new Realisateur();
-//		peterJackson.setNom("Jackson");
-//		peterJackson.setPrenom("Peter");
-//		peterJackson.setDateNaissance(LocalDate.of(1961, 10, 31));
-//
-//		// Creation des films
-//
-//		Film avatar = new Film();
-//		avatar.setTitre("Avatar");
-//		avatar.setDuree(162);
-//		avatar.setRealisateur(jamesCameron);
-//
-//		Film laCommunauteDeLAnneau = new Film();
-//		laCommunauteDeLAnneau.setTitre("La communauté de l'anneau");
-//		laCommunauteDeLAnneau.setDuree(178);
-//		laCommunauteDeLAnneau.setRealisateur(peterJackson);
-//
-//		Film lesDeuxTours = new Film();
-//		lesDeuxTours.setTitre("Les deux tours");
-//		lesDeuxTours.setDuree(179);
-//		lesDeuxTours.setRealisateur(peterJackson);
-//
-//		Film leRetourDuRoi = new Film();
-//		leRetourDuRoi.setTitre("Le retour du roi");
-//		leRetourDuRoi.setDuree(201);
-//		leRetourDuRoi.setRealisateur(peterJackson);
-//
-//		// Affectation des films aux realisateurs
-//
-//		List<Film> peterJacksonFilms = new ArrayList<>();
-//		peterJacksonFilms.add(laCommunauteDeLAnneau);
-//		peterJacksonFilms.add(lesDeuxTours);
-//		peterJacksonFilms.add(leRetourDuRoi);
-//		peterJackson.setFilmRealises(peterJacksonFilms);
-//
-//		List<Film> jamesCameronFilms = new ArrayList<>();
-//		jamesCameronFilms.add(avatar);
-//		jamesCameron.setFilmRealises(jamesCameronFilms);
-//
-//		// Mise a jour du statut "celebre" des Realisateurs
-//
-//		try {
-//			jamesCameron = myFilmsService.updateRealisateurCelebre(jamesCameron);
-//			peterJackson = myFilmsService.updateRealisateurCelebre(peterJackson);
-//
-//			// Attendue : false
-//			System.out.println("James Cameron est-il celebre ? " + jamesCameron.isCelebre());
-//			// Attendue : true
-//			System.out.println("Peter Jackson est-il celebre ? " + peterJackson.isCelebre());
-//		} catch (ServiceException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		// Creation des Realisateurs
+
+		Realisateur jamesCameron = new Realisateur();
+		jamesCameron.setNom("Cameron");
+		jamesCameron.setPrenom("James");
+		jamesCameron.setDateNaissance(LocalDate.of(1954, 8, 16));
+
+		Realisateur peterJackson = new Realisateur();
+		peterJackson.setNom("Jackson");
+		peterJackson.setPrenom("Peter");
+		peterJackson.setDateNaissance(LocalDate.of(1961, 10, 31));
+
+		// Creation des films
+
+		Film avatar = new Film();
+		avatar.setTitre("Avatar");
+		avatar.setDuree(162);
+		avatar.setRealisateur(jamesCameron);
+
+		Film laCommunauteDeLAnneau = new Film();
+		laCommunauteDeLAnneau.setTitre("La communauté de l'anneau");
+		laCommunauteDeLAnneau.setDuree(178);
+		laCommunauteDeLAnneau.setRealisateur(peterJackson);
+
+		Film lesDeuxTours = new Film();
+		lesDeuxTours.setTitre("Les deux tours");
+		lesDeuxTours.setDuree(179);
+		lesDeuxTours.setRealisateur(peterJackson);
+
+		Film leRetourDuRoi = new Film();
+		leRetourDuRoi.setTitre("Le retour du roi");
+		leRetourDuRoi.setDuree(201);
+		leRetourDuRoi.setRealisateur(peterJackson);
+
+		// Affectation des films aux realisateurs
+
+		List<Film> peterJacksonFilms = new ArrayList<>();
+		peterJacksonFilms.add(laCommunauteDeLAnneau);
+		peterJacksonFilms.add(lesDeuxTours);
+		peterJacksonFilms.add(leRetourDuRoi);
+		peterJackson.setFilmRealises(peterJacksonFilms);
+
+		List<Film> jamesCameronFilms = new ArrayList<>();
+		jamesCameronFilms.add(avatar);
+		jamesCameron.setFilmRealises(jamesCameronFilms);
+
+		// Mise a jour du statut "celebre" des Realisateurs
+
+		try {
+			jamesCameron = myFilmsService.updateRealisateurCelebre(jamesCameron);
+			peterJackson = myFilmsService.updateRealisateurCelebre(peterJackson);
+
+			// Attendue : false
+			System.out.println("James Cameron est-il celebre ? " + jamesCameron.isCelebre());
+			// Attendue : true
+		System.out.println("Peter Jackson est-il celebre ? " + peterJackson.isCelebre());
+		} catch (ServiceException e) {
+		// TODO Auto-generated catch block
+			e.printStackTrace();
+	}
 	}
 
 	/**
 	 * Permet de tester le calcul de la duree totale des films.
 	 */
 	public void calculerDureeTotaleTest() {
-//		// Creation des films
-//
-//		Film laCommunauteDeLAnneau = new Film();
-//		laCommunauteDeLAnneau.setTitre("La communauté de l'anneau");
-//		laCommunauteDeLAnneau.setDuree(178);
-//
-//		Film lesDeuxTours = new Film();
-//		lesDeuxTours.setTitre("Les deux tours");
-//		lesDeuxTours.setDuree(179);
-//
-//		Film leRetourDuRoi = new Film();
-//		leRetourDuRoi.setTitre("Le retour du roi");
-//		leRetourDuRoi.setDuree(201);
-//
-//		List<Film> leSeigneurDesAnneaux = new ArrayList<>();
-//		leSeigneurDesAnneaux.add(laCommunauteDeLAnneau);
-//		leSeigneurDesAnneaux.add(lesDeuxTours);
-//		leSeigneurDesAnneaux.add(leRetourDuRoi);
-//
-//		// Calcule de la duree totale
-//
-//		long dureeTotale = myFilmsService.calculerDureeTotale(leSeigneurDesAnneaux);
-//		// Attendue : 558 minutes
-//		System.out.println("La duree totale de la trilogie \"Le Seigneur des Anneaux\" est de : " + dureeTotale + " minutes");
+		// Creation des films
+
+	Film laCommunauteDeLAnneau = new Film();
+	laCommunauteDeLAnneau.setTitre("La communauté de l'anneau");
+	laCommunauteDeLAnneau.setDuree(178);
+
+		Film lesDeuxTours = new Film();
+		lesDeuxTours.setTitre("Les deux tours");
+		lesDeuxTours.setDuree(179);
+
+		Film leRetourDuRoi = new Film();
+		leRetourDuRoi.setTitre("Le retour du roi");
+		leRetourDuRoi.setDuree(201);
+
+		List<Film> leSeigneurDesAnneaux = new ArrayList<>();
+		leSeigneurDesAnneaux.add(laCommunauteDeLAnneau);
+		leSeigneurDesAnneaux.add(lesDeuxTours);
+		leSeigneurDesAnneaux.add(leRetourDuRoi);
+
+		// Calcule de la duree totale
+
+		long dureeTotale = myFilmsService.calculerDureeTotale(leSeigneurDesAnneaux);
+		// Attendue : 558 minutes
+		System.out.println("La duree totale de la trilogie \"Le Seigneur des Anneaux\" est de : " + dureeTotale + " minutes");
 	}
 
 	/**
 	 * Permet de tester le calcul de la note moyenne des films.
 	 */
 	public void calculerNoteMoyenneTest() {
-//		// Creation des notes
-//
-//		double[] notes = { 18, 15.5, 12 };
-//
-//		// Calcul de la note moyenne
-//
-//		double noteMoyenne = myFilmsService.calculerNoteMoyenne(notes);
-//
-//		// Attendue : 15,17
-//		System.out.println("La note moyenne est : " + noteMoyenne);
+		// Creation des notes
+
+		double[] notes = { 18, 15.5, 12 };
+
+		// Calcul de la note moyenne
+
+		double noteMoyenne = myFilmsService.calculerNoteMoyenne(notes);
+
+		// Attendue : 15,17
+		System.out.println("La note moyenne est : " + noteMoyenne);
+	}
+
+
+	//Permet de tester la nouvelle version updateRealisateurCelebres() BONUS
+	// Test de la méthode updateRealisateurCelebres
+	public void testUpdateRealisateurCelebres() {
+		// Création des films
+		List<Film> films = createFilms();
+
+		// Création des réalisateurs avec les films
+		List<Realisateur> realisateurs = new ArrayList<>();
+		realisateurs.add(createRealisateur("Realisateur 1", films.subList(0, 2))); // 2 films
+		realisateurs.add(createRealisateur("Realisateur 2", films.subList(2, 4))); // 2 films
+		realisateurs.add(createRealisateur("Realisateur 3", films)); // 4 films
+
+		// Bloc try-catch pour capturer les exceptions
+		try {
+			// Appeler la méthode à tester
+			List<Realisateur> realisateursCelebres = MyFilmsServiceImpl.updateRealisateurCelebres(realisateurs);
+
+			// Vérification du résultat
+			System.out.println("Test de la méthode updateRealisateurCelebres :");
+			if (realisateursCelebres.size() == 1) {
+				System.out.println("Test réussi : 1 réalisateur célèbre trouvé.");
+			} else {
+				System.out.println("Test échoué : Nombre de réalisateurs célèbres incorrect.");
+			}
+
+			// Vérification du réalisateur célèbre
+			Realisateur celebre = realisateursCelebres.get(0);
+			if (celebre.isCelebre() && "Realisateur 3".equals(celebre.getNom())) {
+				System.out.println("Test réussi : Le réalisateur célèbre est correct.");
+			} else {
+				System.out.println("Test échoué : Le réalisateur célèbre est incorrect.");
+			}
+		} catch (ServiceException e) {
+			// Capturer et afficher l'exception en cas d'erreur
+			System.out.println("Une erreur est survenue : " + e.getMessage());
+		}
+	}
+
+	// Méthode pour créer une liste de films
+	private List<Film> createFilms() {
+		List<Film> films = new ArrayList<>();
+		films.add(new Film("Film 1", 120));
+		films.add(new Film("Film 2", 90));
+		films.add(new Film("Film 3", 100));
+		films.add(new Film("Film 4", 110));
+		return films;
+	}
+
+	// Méthode pour créer un réalisateur avec des films spécifiques
+	private Realisateur createRealisateur(String nom, List<Film> films) {
+		return new Realisateur(nom, films);
 	}
 
 	/**

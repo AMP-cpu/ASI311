@@ -6,6 +6,14 @@ public class Film {
 	private int duree;
 	private Realisateur realisateur;
 
+	public Film() {}
+	public Film(String s, int i) {
+		this.titre = s;
+		this.duree = i;
+	}
+
+
+
 	// Getters and Setters
 	public long getId() { return id; }
 	public void setId(long id) { this.id = id; }

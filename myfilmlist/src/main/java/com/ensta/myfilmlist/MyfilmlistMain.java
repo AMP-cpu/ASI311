@@ -1,5 +1,7 @@
 package com.ensta.myfilmlist;
 import com.ensta.myfilmlist.persistence.ConnectionManager;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
 /**
  * Classe principale pour executer un traitement et s'arreter ensuite.
  */
@@ -9,16 +11,16 @@ public class MyfilmlistMain {
 		MyfilmlistTests myFilmListTests = new MyfilmlistTests();
 
 		// Initialisation du Contexte Spring
-		// AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-		// context.register(MyfilmlistTests.class);
-		// context.scan("com.ensta.myfilmlist.*");
-		// context.refresh();
-		// MyfilmlistTests myFilmListTests = context.getBean(MyfilmlistTests.class);
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		 context.register(MyfilmlistTests.class);
+		context.scan("com.ensta.myfilmlist.*");
+		context.refresh();
+		 myFilmListTests = context.getBean(MyfilmlistTests.class);
 
 		// Demarrage de la base de donnees
 		ConnectionManager.initDatabase();
-		// ConnectionManager.testConnection();
-		// ConnectionManager.createWebServer();
+		 ConnectionManager.testConnection();
+		ConnectionManager.createWebServer();
 
 		System.out.println("--------------------");
 		myFilmListTests.updateRealisateurCelebreTest();
@@ -43,6 +45,10 @@ public class MyfilmlistMain {
 
 		System.out.println("--------------------");
 		myFilmListTests.updateRealisateurCelebre();
+
+
+		System.out.println("--------------------");
+		myFilmListTests.testUpdateRealisateurCelebres();
 	}
 
 }

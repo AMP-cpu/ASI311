@@ -15,9 +15,9 @@ import com.ensta.myfilmlist.service.MyFilmsService;
 import com.ensta.myfilmlist.exception.ServiceException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+
 
 @Service
 public class MyFilmsServiceImpl implements MyFilmsService {
@@ -49,6 +49,76 @@ public class MyFilmsServiceImpl implements MyFilmsService {
             throw new ServiceException("Une erreur est survenue lors de la mise à jour du statut célèbre.", e);
         }
     }
+
+
+
+        public static List<Realisateur> updateRealisateurCelebres(List<Realisateur> realisateurs) throws ServiceException {
+            // Vérifier que la liste des réalisateurs n'est pas nulle
+            if (realisateurs == null) {
+                throw new ServiceException("La liste des réalisateurs ne peut pas être nulle.");
+            }
+
+            try {
+                // Utiliser Streams pour mettre à jour les réalisateurs célèbres et filtrer ceux qui sont célèbres
+                return realisateurs.stream()
+                        // Mettre à jour le statut "célèbre" pour chaque réalisateur en fonction du nombre de films
+                        .peek(realisateur -> {
+                            if (realisateur.getFilmRealises() != null) {
+                                realisateur.setCelebre(realisateur.getFilmRealises().size() >= 3);
+                            }
+                        })
+                        // Filtrer les réalisateurs célèbres
+                        .filter(Realisateur::isCelebre)
+                        .collect(Collectors.toList());  // Retourner une liste de réalisateurs célèbres
+            } catch (Exception e) {
+                // Lever une exception si une erreur survient
+                throw new ServiceException("Une erreur est survenue lors de la mise à jour des réalisateurs célèbres.", e);
+            }
+
+    }
+
+    @Override
+    public int calculerDureeTotale(List<Film> films) {
+        // Vérifier que la liste n'est pas nulle
+        if (films == null) {
+            throw new IllegalArgumentException("La liste des films ne peut pas être null.");
+        }
+
+        // Vérifier que la liste ne contient pas d'éléments nuls
+        if (films.contains(null)) {
+            throw new IllegalArgumentException("La liste des films ne peut pas contenir d'éléments null.");
+        }
+
+        // Calculer la somme des durées des films
+        // Créer un Stream<Film>,
+        // extraire les durées via mapToInt et sommer les durées avec sum
+        return films.stream()
+                .mapToInt(Film::getDuree)
+                .sum();
+    }
+
+    @Override
+    public double calculerNoteMoyenne(double[] notes) {
+        // Vérifier que le tableau n'est pas null
+        if (notes == null) {
+            throw new IllegalArgumentException("Le tableau des notes ne peut pas être null.");
+        }
+
+
+
+        // Créer un Stream de doubles, calculer la moyenne et retourner le résultat arrondi
+        OptionalDouble moyenneOptional = Arrays.stream(notes)  // Crée un DoubleStream à partir du tableau
+                .average();     // Calcule la moyenne, renvoie un OptionalDouble
+
+        // Si la moyenne est présente, arrondir la valeur, sinon retourner 0.0
+        if (moyenneOptional.isPresent()) {
+            // Arrondir la moyenne à 2 chiffres après la virgule
+            return Math.round(moyenneOptional.getAsDouble() * 100.0) / 100.0;
+        } else {
+            return 0.0;  // Si aucune moyenne n'est présente (par exemple tableau vide), retourner 0.0
+        }
+    }
+
 
     @Override
     public List<FilmDTO> findAllFilms() throws ServiceException {

@@ -22,6 +22,13 @@ public class Realisateur {
         this.filmRealises = new ArrayList<Film>();
 
     }
+
+    public Realisateur(String nom, List<Film> films) {
+        this.nom = nom;
+        this.filmRealises = films;
+    }
+
+
     // Getters and Setters
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }

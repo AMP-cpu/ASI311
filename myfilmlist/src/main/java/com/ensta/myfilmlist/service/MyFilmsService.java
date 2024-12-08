@@ -17,4 +17,7 @@ public interface MyFilmsService {
     FilmDTO createFilm(FilmForm filmForm) throws ServiceException;
     List<RealisateurDTO> findAllRealisateurs() throws ServiceException;
     RealisateurDTO findRealisateurByNomAndPrenom(String nom, String prenom) throws ServiceException;
+    FilmDTO findFilmById(long id) throws ServiceException;
+    void deleteFilm(long id) throws ServiceException;
+
 }

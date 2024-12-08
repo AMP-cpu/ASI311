@@ -186,4 +186,35 @@ public class MyFilmsServiceImpl implements MyFilmsService {
 
         return RealisateurMapper.convertRealisateurToRealisateurDTO(realisateur);
     }
+
+
+
+    @Override
+    public FilmDTO findFilmById(long id) throws ServiceException {
+        try {
+            return filmDAO.findById(id)
+                    .map(FilmMapper::convertFilmToFilmDTO)
+                    .orElse(null);
+        } catch (Exception e) {
+            throw new ServiceException("Erreur lors de la récupération du film avec l'ID " + id, e);
+        }
+    }
+    @Override
+    public void deleteFilm(long id) throws ServiceException {
+        try {
+            Optional<Film> optionalFilm = filmDAO.findById(id);
+            if (optionalFilm.isPresent()) {
+                filmDAO.delete(optionalFilm.get());
+                Film film = optionalFilm.get();
+                Realisateur realisateur = film.getRealisateur();
+                updateRealisateurCelebre(realisateur);
+            } else {
+                throw new ServiceException("Film avec l'ID " + id + " non trouvé.");
+            }
+        } catch (Exception e) {
+            throw new ServiceException("Erreur lors de la suppression du film avec l'ID " + id, e);
+        }
+    }
+
+
 }

@@ -241,29 +241,29 @@ public class MyfilmlistTests {
 	 * Permet de tester la recuperation d'un film par son identifiant.
 	 */
 	public void findFilmByIdTest() {
-//		try {
-//			FilmDTO avatar = myFilmsService.findFilmById(1);
-//			System.out.println("Le film avec l'identifiant 1 est : " + avatar);
-//		} catch (ServiceException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			FilmDTO avatar = myFilmsService.findFilmById(2);
+			System.out.println("Le film avec l'identifiant 2 est : " + avatar);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * Permet de tester la suppression d'un film avec son identifiant.
 	 */
 	public void deleteFilmByIdTest() {
-//		try {
-//			FilmDTO filmDTO = myFilmsService.findFilmById(5);
-//			System.out.println("Le film avec l'identifiant 5 est : " + filmDTO);
-//			myFilmsService.deleteFilm(5);
-//			filmDTO = myFilmsService.findFilmById(5);
-//
-//			System.out.println("Suppression du film avec l'identifiant 5...");
-//			System.out.println("Le film avec l'identifiant 5 est : " + filmDTO);
-//		} catch (ServiceException e) {
-//			e.printStackTrace();
-//		}
+	try {
+			FilmDTO filmDTO = myFilmsService.findFilmById(5);
+			System.out.println("Le film avec l'identifiant 5 est : " + filmDTO);
+			myFilmsService.deleteFilm(5);
+			filmDTO = myFilmsService.findFilmById(5);
+
+			System.out.println("Suppression du film avec l'identifiant 5...");
+			System.out.println("Le film avec l'identifiant 5 est : " + filmDTO);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 public class JdbcFilmDAO implements FilmDAO {
     private static final String CREATE_FILM_QUERY = "INSERT INTO film (titre, duree, realisateur_id) VALUES (?, ?, ?)";
     private JdbcTemplate jdbcTemplate = ConnectionManager.getJdbcTemplate();
@@ -66,6 +66,57 @@ public class JdbcFilmDAO implements FilmDAO {
         };
         jdbcTemplate.update(creator, keyHolder);
         film.setId(keyHolder.getKey().longValue());
+        return film;
+    }
+
+
+    @Override
+    public Optional<Film> findById(long id) {
+        String sql = "SELECT f.id AS film_id, f.titre AS film_titre, f.duree AS film_duree, " +
+                "r.id AS realisateur_id, r.nom AS realisateur_nom, r.prenom AS realisateur_prenom, " +
+                "r.date_naissance AS realisateur_date_naissance, r.celebre AS realisateur_celebre " +
+                "FROM film f " +
+                "INNER JOIN realisateur r ON f.realisateur_id = r.id " +
+                "WHERE f.id = ?";
+
+        return jdbcTemplate.query(sql, new Object[]{id}, rs -> {
+            if (rs.next()) {
+                Film film = mapFilmWithRealisateur(rs);
+                return Optional.of(film);
+            }
+            return Optional.empty();
+        });
+    }
+    @Override
+    public void delete(Film film) {
+        String sql = "DELETE FROM film WHERE id = ?";
+        jdbcTemplate.update(sql, film.getId());
+    }
+    @Override
+    public List<Film> findByRealisateurId(long realisateurId) {
+        String sql = "SELECT f.id AS film_id, f.titre AS film_titre, f.duree AS film_duree, " +
+                "r.id AS realisateur_id, r.nom AS realisateur_nom, r.prenom AS realisateur_prenom, " +
+                "r.date_naissance AS realisateur_date_naissance, r.celebre AS realisateur_celebre " +
+                "FROM film f " +
+                "INNER JOIN realisateur r ON f.realisateur_id = r.id " +
+                "WHERE r.id = ?";
+
+        return jdbcTemplate.query(sql, new Object[]{realisateurId}, (rs, rowNum) -> mapFilmWithRealisateur(rs));
+    }
+    private Film mapFilmWithRealisateur(ResultSet rs) throws SQLException {
+        Film film = new Film();
+        film.setId(rs.getLong("film_id"));
+        film.setTitre(rs.getString("film_titre"));
+        film.setDuree(rs.getInt("film_duree"));
+
+        Realisateur realisateur = new Realisateur();
+        realisateur.setId(rs.getLong("realisateur_id"));
+        realisateur.setNom(rs.getString("realisateur_nom"));
+        realisateur.setPrenom(rs.getString("realisateur_prenom"));
+        realisateur.setDateNaissance(rs.getDate("realisateur_date_naissance").toLocalDate());
+        realisateur.setCelebre(rs.getBoolean("realisateur_celebre"));
+
+        film.setRealisateur(realisateur);
         return film;
     }
 }

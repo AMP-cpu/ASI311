@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import com.ensta.myfilmlist.model.Realisateur;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -21,11 +22,38 @@ public class JdbcFilmDAO implements FilmDAO {
 
     @Override
     public List<Film> findAll() {
-        String sql = "SELECT * FROM film";
+        String sql =
+                "SELECT f.id AS film_id, " +
+                        "f.titre AS film_titre, " +
+                        "f.duree AS film_duree, " +
+                        "r.id AS realisateur_id, " +
+                        "r.nom AS realisateur_nom, " +
+                        "r.prenom AS realisateur_prenom, " +
+                        "r.date_naissance AS realisateur_date_naissance, " +
+                        "r.celebre AS realisateur_celebre " +
+                        "FROM film f " +
+                        "INNER JOIN realisateur r " +
+                        "ON f.realisateur_id = r.id";
 
-        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Film.class));
+
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Film film = new Film();
+            film.setId(rs.getLong("id"));
+            film.setTitre(rs.getString("titre"));
+            film.setDuree(rs.getInt("duree"));
+
+            Realisateur realisateur = new Realisateur();
+            realisateur.setId(rs.getLong("realisateur_id"));
+            realisateur.setNom(rs.getString("realisateur_nom"));
+            realisateur.setPrenom(rs.getString("realisateur_prenom"));
+            realisateur.setDateNaissance(rs.getDate("realisateur_date_naissance").toLocalDate());
+            realisateur.setCelebre(rs.getBoolean("realisateur_celebre"));
+
+            film.setRealisateur(realisateur);
+            return film;
+        });
     }
-
     @Override
     public Film save(Film film) {
         KeyHolder keyHolder = new GeneratedKeyHolder();

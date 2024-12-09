@@ -32,15 +32,13 @@ public class MyFilmsServiceImpl implements MyFilmsService {
             throw new ServiceException("Le réalisateur doit exister.");
         }
 
-        // Vérifier que la liste des films réalisés n'est pas nulle
-        if (realisateur.getFilmRealises() == null) {
-            throw new ServiceException("La liste des films ne peut pas être vide.");
-        }
-
         try {
+            List<Film> films = filmDAO.findByRealisateurId(realisateur.getId()) ;
             // Mettre à jour le statut "célèbre" en fonction du nombre de films réalisés
-            boolean celebre = realisateur.getFilmRealises().size() >= 3;
+            boolean celebre = films.size() >= 3;
             realisateur.setCelebre(celebre);
+
+            realisateurDAO.update(realisateur);
 
             // Retourner le réalisateur mis à jour
             return realisateur;
@@ -144,15 +142,17 @@ public class MyFilmsServiceImpl implements MyFilmsService {
     @Override
     public FilmDTO createFilm(FilmForm filmForm) throws ServiceException {
         // Appelle le DAO pour récupérer tous les films
-        Optional<Realisateur> realisateur = realisateurDAO.findById(filmForm.getRealisateurId());
+        Optional<Realisateur> realisateurOpt = realisateurDAO.findById(filmForm.getRealisateurId());
 
-        if (realisateur.isEmpty())
+        if (realisateurOpt.isEmpty())
             throw new ServiceException("Realisateur de ce film n'existe pas.");
 
         try {
             Film film = FilmMapper.convertFilmFormToFilm(filmForm);
-            film.setRealisateur(realisateur.get());
+            Realisateur realisateur = realisateurOpt.get();
+            film.setRealisateur(realisateur);
             film = filmDAO.save(film);
+            updateRealisateurCelebre(realisateur);
             return FilmMapper.convertFilmToFilmDTO(film);
         } catch (Exception e) {
             // En cas d'erreur, lever une ServiceException
@@ -204,10 +204,9 @@ public class MyFilmsServiceImpl implements MyFilmsService {
         try {
             Optional<Film> optionalFilm = filmDAO.findById(id);
             if (optionalFilm.isPresent()) {
-                filmDAO.delete(optionalFilm.get());
                 Film film = optionalFilm.get();
-                Realisateur realisateur = film.getRealisateur();
-                updateRealisateurCelebre(realisateur);
+                filmDAO.delete(film);
+                updateRealisateurCelebre(film.getRealisateur());
             } else {
                 throw new ServiceException("Film avec l'ID " + id + " non trouvé.");
             }

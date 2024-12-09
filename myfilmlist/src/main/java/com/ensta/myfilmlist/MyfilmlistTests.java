@@ -270,38 +270,38 @@ public class MyfilmlistTests {
 	 * Permet de tester la mise a jour du statut celebre d'un Realisateur.
 	 */
 	public void updateRealisateurCelebre() {
-//		try {
-//			RealisateurDTO realisateurDTO = myFilmsService.findRealisateurByNomAndPrenom("Cameron", "James");
-//			// Attendue : false
-//			System.out.println("James Cameron est-il celebre ? " + realisateurDTO.isCelebre());
-//
-//			FilmForm titanic = new FilmForm();
-//			titanic.setTitre("Titanic");
-//			titanic.setDuree(195);
-//			titanic.setRealisateurId(realisateurDTO.getId());
-//
-//			FilmForm leHobbit = new FilmForm();
-//			leHobbit.setTitre("Le Hobbit : Un voyage inattendu");
-//			leHobbit.setDuree(169);
-//			leHobbit.setRealisateurId(realisateurDTO.getId());
-//
-//			myFilmsService.createFilm(titanic);
-//			FilmDTO leHobbitDTO = myFilmsService.createFilm(leHobbit);
-//
-//			System.out.println("James Cameron a realise deux nouveaux films");
-//			realisateurDTO = myFilmsService.findRealisateurByNomAndPrenom("Cameron", "James");
-//
-//			// Attendue : true
-//			System.out.println("James Cameron est-il celebre ? " + realisateurDTO.isCelebre());
-//
-//			myFilmsService.deleteFilm(leHobbitDTO.getId());
-//			System.out.println("Ce n'est pas James Cameron qui a realise le Hobbit, suppression du film !");
-//			realisateurDTO = myFilmsService.findRealisateurByNomAndPrenom("Cameron", "James");
-//
-//			// Attendue : false
-//			System.out.println("James Cameron est-il celebre ? " + realisateurDTO.isCelebre());
-//		} catch (ServiceException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			RealisateurDTO realisateurDTO = myFilmsService.findRealisateurByNomAndPrenom("Cameron", "James");
+			// Attendue : false
+			System.out.println("James Cameron est-il celebre ? " + realisateurDTO.isCelebre());
+
+			FilmForm titanic = new FilmForm();
+			titanic.setTitre("Titanic");
+			titanic.setDuree(195);
+			titanic.setRealisateurId(realisateurDTO.getId());
+
+			FilmForm leHobbit = new FilmForm();
+			leHobbit.setTitre("Le Hobbit : Un voyage inattendu");
+			leHobbit.setDuree(169);
+			leHobbit.setRealisateurId(realisateurDTO.getId());
+
+			myFilmsService.createFilm(titanic);
+			FilmDTO leHobbitDTO = myFilmsService.createFilm(leHobbit);
+
+			System.out.println("James Cameron a realise deux nouveaux films");
+			realisateurDTO = myFilmsService.findRealisateurByNomAndPrenom("Cameron", "James");
+
+			// Attendue : true
+			System.out.println("James Cameron est-il celebre ? " + realisateurDTO.isCelebre());
+
+			myFilmsService.deleteFilm(leHobbitDTO.getId());
+			System.out.println("Ce n'est pas James Cameron qui a realise le Hobbit, suppression du film !");
+			realisateurDTO = myFilmsService.findRealisateurByNomAndPrenom("Cameron", "James");
+
+			// Attendue : false
+			System.out.println("James Cameron est-il celebre ? " + realisateurDTO.isCelebre());
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
 	}
 }

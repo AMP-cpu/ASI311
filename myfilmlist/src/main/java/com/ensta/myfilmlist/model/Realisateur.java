@@ -20,14 +20,12 @@ public class Realisateur {
         this.dateNaissance = dateNaissance;
         this.celebre = celebre;
         this.filmRealises = new ArrayList<Film>();
-
     }
 
     public Realisateur(String nom, List<Film> films) {
         this.nom = nom;
         this.filmRealises = films;
     }
-
 
     // Getters and Setters
     public long getId() { return id; }

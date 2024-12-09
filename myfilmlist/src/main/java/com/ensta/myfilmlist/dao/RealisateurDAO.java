@@ -9,4 +9,5 @@ public interface RealisateurDAO {
     List<Realisateur> findAll();
     Optional<Realisateur> findById(long id);
     Realisateur findByNomAndPrenom(String nom, String prenom);
+    Realisateur update (Realisateur realisateur);
 }

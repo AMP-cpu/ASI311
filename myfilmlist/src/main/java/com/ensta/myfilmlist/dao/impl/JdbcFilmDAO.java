@@ -35,24 +35,7 @@ public class JdbcFilmDAO implements FilmDAO {
                         "INNER JOIN realisateur r " +
                         "ON f.realisateur_id = r.id";
 
-
-
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            Film film = new Film();
-            film.setId(rs.getLong("id"));
-            film.setTitre(rs.getString("titre"));
-            film.setDuree(rs.getInt("duree"));
-
-            Realisateur realisateur = new Realisateur();
-            realisateur.setId(rs.getLong("realisateur_id"));
-            realisateur.setNom(rs.getString("realisateur_nom"));
-            realisateur.setPrenom(rs.getString("realisateur_prenom"));
-            realisateur.setDateNaissance(rs.getDate("realisateur_date_naissance").toLocalDate());
-            realisateur.setCelebre(rs.getBoolean("realisateur_celebre"));
-
-            film.setRealisateur(realisateur);
-            return film;
-        });
+        return jdbcTemplate.query(sql, (rs, rowNum) -> mapFilmWithRealisateur(rs));
     }
     @Override
     public Film save(Film film) {

@@ -47,8 +47,8 @@ public class MyfilmlistMain {
 		myFilmListTests.updateRealisateurCelebre();
 
 
-		System.out.println("--------------------");
-		myFilmListTests.testUpdateRealisateurCelebres();
+//		System.out.println("--------------------");
+//		myFilmListTests.testUpdateRealisateurCelebres();
 	}
 
 }

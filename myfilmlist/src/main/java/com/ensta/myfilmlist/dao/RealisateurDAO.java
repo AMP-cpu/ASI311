@@ -6,6 +6,8 @@ import com.ensta.myfilmlist.model.Realisateur;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 public interface RealisateurDAO {
     List<Realisateur> findAll();
     Optional<Realisateur> findById(long id);

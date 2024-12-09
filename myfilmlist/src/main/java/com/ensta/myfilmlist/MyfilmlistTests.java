@@ -12,6 +12,8 @@ import com.ensta.myfilmlist.service.MyFilmsService;
 import com.ensta.myfilmlist.service.impl.MyFilmsServiceImpl;
 import com.ensta.myfilmlist.exception.ServiceException;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import static org.hibernate.validator.internal.util.Contracts.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -22,11 +24,22 @@ import static org.junit.Assert.assertTrue;
 /**
  * Classe de tests du service MyFilmsServiceImpl.
  */
+ @Component
 public class MyfilmlistTests {
 
 	/** Initialisation du service pour les traitements de l'application MyFilms */
 
-	private MyFilmsService myFilmsService = new MyFilmsServiceImpl();
+	private MyFilmsService myFilmsService;
+
+	public MyfilmlistTests(){
+
+	}
+
+	@Autowired	
+	public MyfilmlistTests(MyFilmsService myFilmsService){
+		this.myFilmsService = myFilmsService;
+	}
+
 
 	/**
 	 * Permet de tester la mise a jour du statut "celebre" d'un RealisateurDTO en fonction du nombre de films realises.

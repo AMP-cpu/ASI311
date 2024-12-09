@@ -10,6 +10,9 @@ import com.ensta.myfilmlist.dto.FilmDTO;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public interface MyFilmsService {
     Realisateur updateRealisateurCelebre(Realisateur realisateur) throws ServiceException;
     int calculerDureeTotale(List<Film> films);

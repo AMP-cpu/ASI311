@@ -4,6 +4,8 @@ import com.ensta.myfilmlist.model.Film;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 public interface FilmDAO {
     List<Film> findAll();
     Film save(Film film);

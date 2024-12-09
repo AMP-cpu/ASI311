@@ -7,6 +7,7 @@ import com.ensta.myfilmlist.dao.impl.JdbcRealisateurDAO;
 import com.ensta.myfilmlist.dto.FilmDTO;
 import com.ensta.myfilmlist.dto.RealisateurDTO;
 import com.ensta.myfilmlist.form.FilmForm;
+import com.ensta.myfilmlist.form.RealisateurForm;
 import com.ensta.myfilmlist.mapper.FilmMapper;
 import com.ensta.myfilmlist.mapper.RealisateurMapper;
 import com.ensta.myfilmlist.model.Film;
@@ -157,6 +158,29 @@ public class MyFilmsServiceImpl implements MyFilmsService {
         } catch (Exception e) {
             // En cas d'erreur, lever une ServiceException
             throw new ServiceException("Erreur lors de la création du film", e);
+        }
+    }
+
+    @Override
+    public RealisateurDTO createRealisateur(RealisateurForm realisateurForm) throws ServiceException {
+        try {
+            Realisateur realisateur = RealisateurMapper.convertRealisateurFormToRealisateur(realisateurForm);
+            realisateur = realisateurDAO.save(realisateur);
+            return RealisateurMapper.convertRealisateurToRealisateurDTO(realisateur);
+        } catch (Exception e) {
+            // En cas d'erreur, lever une ServiceException
+            throw new ServiceException("Erreur lors de la création du realisateur", e);
+        }
+    }
+
+    @Override
+    public RealisateurDTO findRealisateurById(long id) throws ServiceException {
+        try {
+            return realisateurDAO.findById(id)
+                    .map(RealisateurMapper::convertRealisateurToRealisateurDTO)
+                    .orElse(null);
+        } catch (Exception e) {
+            throw new ServiceException("Erreur lors de la récupération du realisateur avec l'ID " + id, e);
         }
     }
 

@@ -7,14 +7,17 @@ import com.ensta.myfilmlist.persistence.ConnectionManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
 public class JdbcRealisateurDAO implements RealisateurDAO {
+    private static final String CREATE_REALISATEUR_QUERY = "INSERT INTO realisateur (prenom, nom, date_naissance, celebre) VALUES (?, ?, ?, ?)";
     private JdbcTemplate jdbcTemplate = ConnectionManager.getJdbcTemplate();
 
     @Override
@@ -67,6 +70,22 @@ public class JdbcRealisateurDAO implements RealisateurDAO {
                 realisateur.isCelebre(),
                 realisateur.getId()
         );
+        return realisateur;
+    }
+
+    @Override
+    public Realisateur save(Realisateur realisateur) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        PreparedStatementCreator creator = conn -> {
+            PreparedStatement statement = conn.prepareStatement(CREATE_REALISATEUR_QUERY, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, realisateur.getPrenom());
+            statement.setString(2, realisateur.getNom());
+            statement.setDate(3, Date.valueOf(realisateur.getDateNaissance()));
+            statement.setBoolean(4, realisateur.isCelebre());
+            return statement;
+        };
+        jdbcTemplate.update(creator, keyHolder);
+        realisateur.setId(keyHolder.getKey().longValue());
         return realisateur;
     }
 }

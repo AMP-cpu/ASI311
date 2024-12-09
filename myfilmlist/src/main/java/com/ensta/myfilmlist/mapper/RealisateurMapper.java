@@ -1,6 +1,9 @@
 package com.ensta.myfilmlist.mapper;
 
 import com.ensta.myfilmlist.dto.RealisateurDTO;
+import com.ensta.myfilmlist.form.FilmForm;
+import com.ensta.myfilmlist.form.RealisateurForm;
+import com.ensta.myfilmlist.model.Film;
 import com.ensta.myfilmlist.model.Realisateur;
 
 import java.util.List;
@@ -59,6 +62,22 @@ public class RealisateurMapper {
 		realisateur.setNom(realisateurDTO.getNom());
 		realisateur.setDateNaissance(realisateurDTO.getDateNaissance());
 		realisateur.setCelebre(realisateurDTO.isCelebre());
+
+		return realisateur;
+	}
+
+	/**
+	 * Convertit un Form en film.
+	 *
+	 * @param filmForm le Form a convertir
+	 * @return Un Film construit a partir des donnes du Form.
+	 */
+	public static Realisateur convertRealisateurFormToRealisateur(RealisateurForm realisateurForm) {
+		Realisateur realisateur = new Realisateur();
+		realisateur.setPrenom(realisateurForm.getPrenom());
+		realisateur.setNom(realisateurForm.getNom());
+		realisateur.setDateNaissance(realisateurForm.getDateNaissance());
+		realisateur.setCelebre(false);
 
 		return realisateur;
 	}

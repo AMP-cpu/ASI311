@@ -26,4 +26,8 @@ public interface FilmResource {
 
     @PostMapping
     ResponseEntity<FilmDTO> createFilm(@RequestBody FilmForm filmForm) throws ControllerException;
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> deleteFilm(@PathVariable("id") long id) throws ControllerException;
+    
 }

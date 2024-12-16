@@ -1,0 +1,47 @@
+.accueil {
+    text-align: center;
+
+    width: 100%;
+    margin: 0;
+    margin-bottom: 2rem;
+    margin-top: 5rem;
+  }
+  
+  .movie-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    padding: 20px; 
+    background-color: #f9f9f9; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .movie-poster {
+    height: auto;
+    max-width: 400px; /* Increase the width of the poster */
+    max-height: 450px; /* Increase the height of the poster */
+    border-radius: 10px; /* Optional: rounded corners for the image */
+  }
+  
+  .movie-title {
+    margin-top: 20px; /* Increase the space between the image and title */
+    font-size: 18px; /* Increase the font size */
+    color: #333;
+    font-weight: bold;
+    padding: 5px 10px; /* Add padding to the title text */
+    background-color: #fff; /* Optional: background color for the title */
+    border-radius: 5px; /* Optional: rounded corners for the title */
+  }
+  
+  /* Optional: Customize slider appearance */
+  .slick-prev, .slick-next {
+    color: #fff;
+  }
+  
+  .slick-prev:before, .slick-next:before {
+    color: #fff; /* Change arrow color */
+  }
+  

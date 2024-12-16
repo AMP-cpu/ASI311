@@ -7,41 +7,79 @@
     margin-top: 5rem;
   }
   
-  .movie-card {
+  .movie-list {
+    list-style-type: none;
+    padding: 0;
     display: flex;
     flex-direction: column;
+    width: 100%;
     align-items: center;
-    text-align: center;
-
-    padding: 20px; 
-    background-color: #f9f9f9; 
-    border-radius: 10px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   }
   
-  .movie-poster {
-    height: auto;
-    max-width: 400px; /* Increase the width of the poster */
-    max-height: 450px; /* Increase the height of the poster */
-    border-radius: 10px; /* Optional: rounded corners for the image */
+  .movie-item {
+    padding: 10px;
+    width: 80%;
+    height: auto; /* Adjust height automatically */
+    background: #333;
+    cursor: pointer;
+    color: white;
+    margin: 1rem auto;
+    border-radius: 16px;
+    transition: background-color 0.4s ease;
+    text-align: left;
+  }
+  
+  .movie-item:hover {
+    background-color: #5a5a5a;
   }
   
   .movie-title {
-    margin-top: 20px; /* Increase the space between the image and title */
-    font-size: 18px; /* Increase the font size */
-    color: #333;
+    font-size: 18px;
     font-weight: bold;
-    padding: 5px 10px; /* Add padding to the title text */
-    background-color: #fff; /* Optional: background color for the title */
-    border-radius: 5px; /* Optional: rounded corners for the title */
+    margin-bottom: 5px;
   }
   
-  /* Optional: Customize slider appearance */
-  .slick-prev, .slick-next {
-    color: #fff;
+  .movie-director {
+    font-size: 14px;
+    color: #ddd;
+  }
+
+  .savoir-plus {
+    font-size: 14px;
+    color: transparent;
+    transition: 0.4s;
+  }
+  .movie-item:hover .savoir-plus {
+    color: #ddd;
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999; /* Ensure overlay is on top */
+  }
+
+  .movie-details {
+    background-color: black;
+    padding: 1rem;
+    border-radius: 10px;
+    text-align: center;
+    width: 90%;
+    height: 80%;
   }
   
-  .slick-prev:before, .slick-next:before {
-    color: #fff; /* Change arrow color */
+  .movie-details button {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
   }
   

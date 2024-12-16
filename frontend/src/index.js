@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client'; // Add this import
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { Home } from './components/Home/Home';

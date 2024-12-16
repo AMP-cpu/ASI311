@@ -80,4 +80,29 @@ public class FilmResourceImpl implements FilmResource {
         }
     }
 
+    
+    @ApiOperation(value = "Supprime un film par son ID", notes = "Permet de supprimer un film par son ID.")
+    @ApiResponses(value = {
+        @ApiResponse(code = 204, message = "Le film a été supprimé correctement"),
+        @ApiResponse(code = 404, message = "Le film n'a pas été trouvé")
+    })
+    @Override
+    public ResponseEntity<?> deleteFilm(long ID) throws ControllerException {
+        try {
+            FilmDTO film = myFilmsService.findFilmById(ID);
+            
+            if(film == null){
+                return ResponseEntity.notFound().build();
+            }
+            
+            myFilmsService.deleteFilm(film.getId());
+
+            return ResponseEntity.noContent().build();
+       
+        } catch (Exception e) {
+            throw new ControllerException("Error in deleting film.", e);
+        }
+
+    }    
+
 }

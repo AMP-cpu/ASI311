@@ -9,6 +9,7 @@
     height: 70px;
     position: fixed;
     top: 0px;
+    z-index: 9999;
   }
   ul {
     display: flex;
@@ -33,4 +34,5 @@
     width: 70px;
     height: 70px; 
     margin-left: 1rem;
+    cursor: pointer;
   }

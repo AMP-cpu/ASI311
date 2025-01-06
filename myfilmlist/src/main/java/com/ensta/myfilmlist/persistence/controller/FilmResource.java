@@ -2,6 +2,8 @@ package com.ensta.myfilmlist.persistence.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,12 +24,12 @@ public interface FilmResource {
     ResponseEntity<List<FilmDTO>> getAllfilms() throws ControllerException;
     
     @GetMapping("/{id}")
-    ResponseEntity<FilmDTO> getFilmById(@PathVariable("id") long id) throws ControllerException;
+    ResponseEntity<FilmDTO> getFilmById(@Valid @PathVariable("id") long id) throws ControllerException;
 
     @PostMapping
-    ResponseEntity<FilmDTO> createFilm(@RequestBody FilmForm filmForm) throws ControllerException;
+    ResponseEntity<FilmDTO> createFilm(@Valid @RequestBody FilmForm filmForm) throws ControllerException;
 
     @DeleteMapping("/{id}")
-    ResponseEntity<?> deleteFilm(@PathVariable("id") long id) throws ControllerException;
+    ResponseEntity<?> deleteFilm(@Valid @PathVariable("id") long id) throws ControllerException;
     
 }

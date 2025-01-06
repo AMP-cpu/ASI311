@@ -14,6 +14,8 @@ import com.ensta.myfilmlist.model.Film;
 import com.ensta.myfilmlist.model.Realisateur;
 import com.ensta.myfilmlist.service.MyFilmsService;
 import com.ensta.myfilmlist.exception.ServiceException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,8 +25,18 @@ import java.util.stream.Collectors;
 @Service
 public class MyFilmsServiceImpl implements MyFilmsService {
     // Instanciation de FilmDAO
-    private FilmDAO filmDAO = new JdbcFilmDAO();
-    private RealisateurDAO realisateurDAO = new JdbcRealisateurDAO();
+    private FilmDAO filmDAO;
+    private RealisateurDAO realisateurDAO;
+
+    public MyFilmsServiceImpl(){
+
+    }
+
+    @Autowired
+    public MyFilmsServiceImpl(FilmDAO filmDAO, RealisateurDAO realisateurDAO){
+        this.filmDAO = filmDAO;
+        this.realisateurDAO=realisateurDAO;
+    }
 
     @Override
     public Realisateur updateRealisateurCelebre(Realisateur realisateur) throws ServiceException {

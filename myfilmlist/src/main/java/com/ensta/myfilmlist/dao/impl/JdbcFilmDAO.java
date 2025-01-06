@@ -9,6 +9,8 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+
 import com.ensta.myfilmlist.model.Realisateur;
 
 import javax.sql.DataSource;
@@ -16,9 +18,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+@Repository
 public class JdbcFilmDAO implements FilmDAO {
     private static final String CREATE_FILM_QUERY = "INSERT INTO film (titre, duree, realisateur_id) VALUES (?, ?, ?)";
     private JdbcTemplate jdbcTemplate = ConnectionManager.getJdbcTemplate();
+
+    public JdbcFilmDAO(){}
 
     @Override
     public List<Film> findAll() {

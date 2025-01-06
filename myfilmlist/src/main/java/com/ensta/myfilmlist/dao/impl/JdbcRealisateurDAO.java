@@ -9,16 +9,23 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public class JdbcRealisateurDAO implements RealisateurDAO {
     private static final String CREATE_REALISATEUR_QUERY = "INSERT INTO realisateur (prenom, nom, date_naissance, celebre) VALUES (?, ?, ?, ?)";
     private JdbcTemplate jdbcTemplate = ConnectionManager.getJdbcTemplate();
+
+    public JdbcRealisateurDAO(){}
 
     @Override
     public List<Realisateur> findAll() {

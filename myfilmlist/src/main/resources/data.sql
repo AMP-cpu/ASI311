@@ -8,9 +8,9 @@ INSERT INTO Film(titre, duree, realisateur_id) VALUES('La communauté de l''anne
 INSERT INTO Film(titre, duree, realisateur_id) VALUES('Les deux tours', 179, 2);
 INSERT INTO Film(titre, duree, realisateur_id) VALUES('Le retour du roi', 201, 2);
 
-CREATE TABLE IF NOT EXISTS Utilisateur(id INT primary key auto_increment, email VARCHAR(100), password VARCHAR(100), is_admin BOOLEAN);
-INSERT INTO Utilisateur(email, password, is_admin) VALUES('salima@salima.com', 'salima', TRUE);
-INSERT INTO Utilisateur(email, password, is_admin) VALUES('leo@leo.com', 'leo', FALSE);
+CREATE TABLE IF NOT EXISTS Utilisateur(id INT primary key auto_increment, email VARCHAR(100), password VARCHAR(100), nom VARCHAR(100), prenom VARCHAR(100), is_admin BOOLEAN);
+INSERT INTO Utilisateur(email, password, nom, prenom, is_admin) VALUES('salima@salima.com', 'salima', 'Azouz', 'Salima', TRUE);
+INSERT INTO Utilisateur(email, password, nom, prenom, is_admin) VALUES('leo@leo.com', 'leo','Picoli', 'Leonardo', FALSE);
 
 CREATE TABLE IF NOT EXISTS UtilisateurFilm(id INT primary key auto_increment, utilisateur_id INT, film_id INT, note INT, is_favoris BOOLEAN);
 INSERT INTO UtilisateurFilm(utilisateur_id, film_id, note, is_favoris) VALUES(1, 1, 3, false);

@@ -9,7 +9,9 @@ import com.ensta.myfilmlist.dto.FilmDTO;
 
 
 import java.util.List;
+import java.util.Optional;
 
+import com.ensta.myfilmlist.model.UtilisateurFilm;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,9 +22,13 @@ public interface MyFilmsService {
     List<FilmDTO> findAllFilms() throws ServiceException;
     FilmDTO createFilm(FilmForm filmForm) throws ServiceException;
     List<RealisateurDTO> findAllRealisateurs() throws ServiceException;
+    List<FilmDTO> findAllFilmsOfRealisateur(Realisateur realisateur) throws ServiceException;
     RealisateurDTO findRealisateurByNomAndPrenom(String nom, String prenom) throws ServiceException;
     FilmDTO findFilmById(long id) throws ServiceException;
     void deleteFilm(long id) throws ServiceException;
     RealisateurDTO createRealisateur(RealisateurForm realisateurForm) throws ServiceException;
     RealisateurDTO findRealisateurById(long id) throws ServiceException;
+
+    List<FilmDTO> findUserFilms(long userId) throws ServiceException;
+    Double findFilmAverageNote(long filmId) throws ServiceException;
 }

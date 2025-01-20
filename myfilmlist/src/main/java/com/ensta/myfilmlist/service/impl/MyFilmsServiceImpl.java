@@ -2,8 +2,7 @@ package com.ensta.myfilmlist.service.impl;
 
 import com.ensta.myfilmlist.dao.FilmDAO;
 import com.ensta.myfilmlist.dao.RealisateurDAO;
-import com.ensta.myfilmlist.dao.impl.JdbcFilmDAO;
-import com.ensta.myfilmlist.dao.impl.JdbcRealisateurDAO;
+import com.ensta.myfilmlist.dao.UtilisateurFilmDAO;
 import com.ensta.myfilmlist.dto.FilmDTO;
 import com.ensta.myfilmlist.dto.RealisateurDTO;
 import com.ensta.myfilmlist.form.FilmForm;
@@ -12,6 +11,7 @@ import com.ensta.myfilmlist.mapper.FilmMapper;
 import com.ensta.myfilmlist.mapper.RealisateurMapper;
 import com.ensta.myfilmlist.model.Film;
 import com.ensta.myfilmlist.model.Realisateur;
+import com.ensta.myfilmlist.model.Utilisateur;
 import com.ensta.myfilmlist.service.MyFilmsService;
 import com.ensta.myfilmlist.exception.ServiceException;
 
@@ -27,22 +27,60 @@ public class MyFilmsServiceImpl implements MyFilmsService {
     // Instanciation de FilmDAO
     private FilmDAO filmDAO;
     private RealisateurDAO realisateurDAO;
+    private UtilisateurFilmDAO utilisateurFilmDAO;
 
     public MyFilmsServiceImpl(){
 
     }
 
     @Autowired
-    public MyFilmsServiceImpl(FilmDAO filmDAO, RealisateurDAO realisateurDAO){
+    public MyFilmsServiceImpl(FilmDAO filmDAO, RealisateurDAO realisateurDAO, UtilisateurFilmDAO utilisateurFilmDAO){
         this.filmDAO = filmDAO;
         this.realisateurDAO=realisateurDAO;
+        this.utilisateurFilmDAO = utilisateurFilmDAO;
+    }
+
+    private void checkRealisateurOk(Realisateur realisateur) throws ServiceException {
+        // Vérifier que le réalisateur n'est pas null
+        if (realisateur == null) {
+            throw new ServiceException("Le réalisateur ne doit pas etre null");
+        }
+
+        Optional<Realisateur> optionalRealisateur = realisateurDAO.findById(realisateur.getId());
+        if (optionalRealisateur.isEmpty()) {
+            throw new ServiceException("Ce realisateur n'existe pas");
+        }
+    }
+
+    public List<FilmDTO> findAllFilmsOfRealisateur(Realisateur realisateur) throws ServiceException {
+        this.checkRealisateurOk(realisateur); // throws an exception
+
+        try {
+            List<Film> films = filmDAO.findByRealisateurId(realisateur.getId());
+
+            // Convertir les objets Film en FilmDTO
+            List<FilmDTO> filmDTOs = new ArrayList<>();
+            for (Film film : films) {
+                if (film != null) {
+                    filmDTOs.add(FilmMapper.convertFilmToFilmDTO(film)); // Conversion via FilmMapper
+                }
+            }
+            return filmDTOs;
+        } catch (Exception e) {
+            throw new ServiceException("Une erreur est survenue lors de la recuperation des films du realisateur", e);
+        }
     }
 
     @Override
     public Realisateur updateRealisateurCelebre(Realisateur realisateur) throws ServiceException {
         // Vérifier que le réalisateur n'est pas null
         if (realisateur == null) {
-            throw new ServiceException("Le réalisateur doit exister.");
+            throw new ServiceException("Le réalisateur ne doit pas etre null");
+        }
+
+        Optional<Realisateur> optionalRealisateur = realisateurDAO.findById(realisateur.getId());
+        if (optionalRealisateur.isEmpty()) {
+            throw new ServiceException("Ce realisateur n'existe pas");
         }
 
         try {
@@ -61,31 +99,28 @@ public class MyFilmsServiceImpl implements MyFilmsService {
         }
     }
 
+    public static List<Realisateur> updateRealisateurCelebres(List<Realisateur> realisateurs) throws ServiceException {
+        // Vérifier que la liste des réalisateurs n'est pas nulle
+        if (realisateurs == null) {
+            throw new ServiceException("La liste des réalisateurs ne peut pas être nulle.");
+        }
 
-
-        public static List<Realisateur> updateRealisateurCelebres(List<Realisateur> realisateurs) throws ServiceException {
-            // Vérifier que la liste des réalisateurs n'est pas nulle
-            if (realisateurs == null) {
-                throw new ServiceException("La liste des réalisateurs ne peut pas être nulle.");
-            }
-
-            try {
-                // Utiliser Streams pour mettre à jour les réalisateurs célèbres et filtrer ceux qui sont célèbres
-                return realisateurs.stream()
-                        // Mettre à jour le statut "célèbre" pour chaque réalisateur en fonction du nombre de films
-                        .peek(realisateur -> {
-                            if (realisateur.getFilmRealises() != null) {
-                                realisateur.setCelebre(realisateur.getFilmRealises().size() >= 3);
-                            }
-                        })
-                        // Filtrer les réalisateurs célèbres
-                        .filter(Realisateur::isCelebre)
-                        .collect(Collectors.toList());  // Retourner une liste de réalisateurs célèbres
-            } catch (Exception e) {
-                // Lever une exception si une erreur survient
-                throw new ServiceException("Une erreur est survenue lors de la mise à jour des réalisateurs célèbres.", e);
-            }
-
+        try {
+            // Utiliser Streams pour mettre à jour les réalisateurs célèbres et filtrer ceux qui sont célèbres
+            return realisateurs.stream()
+                    // Mettre à jour le statut "célèbre" pour chaque réalisateur en fonction du nombre de films
+                    .peek(realisateur -> {
+                        if (realisateur.getFilmRealises() != null) {
+                            realisateur.setCelebre(realisateur.getFilmRealises().size() >= 3);
+                        }
+                    })
+                    // Filtrer les réalisateurs célèbres
+                    .filter(Realisateur::isCelebre)
+                    .collect(Collectors.toList());  // Retourner une liste de réalisateurs célèbres
+        } catch (Exception e) {
+            // Lever une exception si une erreur survient
+            throw new ServiceException("Une erreur est survenue lors de la mise à jour des réalisateurs célèbres.", e);
+        }
     }
 
     @Override
@@ -193,6 +228,34 @@ public class MyFilmsServiceImpl implements MyFilmsService {
                     .orElse(null);
         } catch (Exception e) {
             throw new ServiceException("Erreur lors de la récupération du realisateur avec l'ID " + id, e);
+        }
+    }
+
+    @Override
+    public List<FilmDTO> findUserFilms(long userId) throws ServiceException {
+        try {
+            List<Film> films = utilisateurFilmDAO.findByUserId(userId);
+
+            List<FilmDTO> filmDTOs = new ArrayList<>();
+            for (Film film : films) {
+                if (film != null) {
+                    filmDTOs.add(FilmMapper.convertFilmToFilmDTO(film)); // Conversion via FilmMapper
+                }
+            }
+            return filmDTOs;
+        } catch (Exception e) {
+            throw new ServiceException("Erreur lors de la récupération des films notés/favorités par l'utilisateur", e);
+        }
+    }
+
+    @Override
+    public Double findFilmAverageNote(long filmId) throws ServiceException {
+        try {
+            Optional<Double> optionalAvgNote = utilisateurFilmDAO.findFilmAverageNote(filmId);
+
+            return optionalAvgNote.orElse(null);
+        } catch (Exception e) {
+            throw new ServiceException("Erreur lors de la récupération de la moyenne de la note", e);
         }
     }
 

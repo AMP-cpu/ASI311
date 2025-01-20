@@ -1,7 +1,6 @@
 package com.ensta.myfilmlist.dao.impl;
 
 import com.ensta.myfilmlist.dao.UtilisateurDAO;
-import com.ensta.myfilmlist.model.Realisateur;
 import com.ensta.myfilmlist.model.Utilisateur;
 import com.ensta.myfilmlist.persistence.ConnectionManager;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -10,15 +9,25 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Optional;
 
+@Repository
 public class JbdcUtilisateurDAO implements UtilisateurDAO {
+
     private static final String CREATE_UTILISATEUR_QUERY = "INSERT INTO Utilisateur (email, password, nom, prenom) VALUES (?, ?, ?, ?)";
     private JdbcTemplate jdbcTemplate = ConnectionManager.getJdbcTemplate();
+
+    private final PasswordEncoder passwordEncoder;
+
+    // Injecter le PasswordEncoder via le constructeur
+    public JbdcUtilisateurDAO(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public Optional<Utilisateur> findByEmail(String email) {
@@ -39,11 +48,14 @@ public class JbdcUtilisateurDAO implements UtilisateurDAO {
 
     @Override
     public Utilisateur save(Utilisateur utilisateur) {
+        // Encoder le mot de passe avant de l'insérer
+        utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
+
         KeyHolder keyHolder = new GeneratedKeyHolder();
         PreparedStatementCreator creator = conn -> {
             PreparedStatement statement = conn.prepareStatement(CREATE_UTILISATEUR_QUERY, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, utilisateur.getEmail());
-            statement.setString(2, utilisateur.getPassword());
+            statement.setString(2, utilisateur.getPassword()); // Mot de passe encodé
             statement.setString(3, utilisateur.getNom());
             statement.setString(4, utilisateur.getPrenom());
             return statement;

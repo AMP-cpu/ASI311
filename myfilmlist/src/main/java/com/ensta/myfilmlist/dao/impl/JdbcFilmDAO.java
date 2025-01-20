@@ -40,7 +40,7 @@ public class JdbcFilmDAO implements FilmDAO {
                         "INNER JOIN realisateur r " +
                         "ON f.realisateur_id = r.id";
 
-        return jdbcTemplate.query(sql, (rs, rowNum) -> mapFilmWithRealisateur(rs));
+        return jdbcTemplate.query(sql, (rs, rowNum) -> getFilmFrom(rs));
     }
     @Override
     public Film save(Film film) {
@@ -69,7 +69,7 @@ public class JdbcFilmDAO implements FilmDAO {
 
         return jdbcTemplate.query(sql, new Object[]{id}, rs -> {
             if (rs.next()) {
-                Film film = mapFilmWithRealisateur(rs);
+                Film film = getFilmFrom(rs);
                 return Optional.of(film);
             }
             return Optional.empty();
@@ -89,9 +89,9 @@ public class JdbcFilmDAO implements FilmDAO {
                 "INNER JOIN realisateur r ON f.realisateur_id = r.id " +
                 "WHERE r.id = ?";
 
-        return jdbcTemplate.query(sql, new Object[]{realisateurId}, (rs, rowNum) -> mapFilmWithRealisateur(rs));
+        return jdbcTemplate.query(sql, new Object[]{realisateurId}, (rs, rowNum) -> getFilmFrom(rs));
     }
-    private Film mapFilmWithRealisateur(ResultSet rs) throws SQLException {
+    static Film getFilmFrom(ResultSet rs) throws SQLException {
         Film film = new Film();
         film.setId(rs.getLong("film_id"));
         film.setTitre(rs.getString("film_titre"));

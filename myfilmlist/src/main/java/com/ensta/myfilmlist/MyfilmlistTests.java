@@ -14,6 +14,13 @@ import com.ensta.myfilmlist.exception.ServiceException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.ensta.myfilmlist.dao.UtilisateurDAO;
+import com.ensta.myfilmlist.dao.impl.JbdcUtilisateurDAO;
+import com.ensta.myfilmlist.model.Utilisateur;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Optional; // Utilisé pour le retour d'une valeur facultative de findByEmail
 
 import static org.hibernate.validator.internal.util.Contracts.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -317,4 +324,43 @@ public class MyfilmlistTests {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Permet de tester la création et l'authentification d'un utilisateur avec un mot de passe encodé.
+	 */
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	public void createAndAuthenticateUserTest() {
+		// Récupération du DAO et du PasswordEncoder via Spring
+		UtilisateurDAO utilisateurDAO = new JbdcUtilisateurDAO(passwordEncoder);
+
+		// Création d'un utilisateur avec un mot de passe brut
+		Utilisateur utilisateur = new Utilisateur();
+		utilisateur.setEmail("testuser@example.com");
+		utilisateur.setPassword("plainpassword123"); // Mot de passe brut
+		utilisateur.setNom("Test");
+		utilisateur.setPrenom("User");
+
+		// Sauvegarder l'utilisateur (le mot de passe sera encodé)
+		utilisateurDAO.save(utilisateur);
+
+		// Afficher les informations sauvegardées
+		System.out.println("Utilisateur sauvegardé avec succès :");
+		System.out.println("Email : " + utilisateur.getEmail());
+		System.out.println("Mot de passe encodé : " + utilisateur.getPassword());
+
+		// Vérifier si l'utilisateur est correctement encodé
+		Utilisateur retrievedUser = utilisateurDAO.findByEmail("testuser@example.com").orElseThrow();
+		boolean matches = passwordEncoder.matches("plainpassword123", retrievedUser.getPassword());
+
+		// Afficher le résultat de la correspondance
+		System.out.println("Le mot de passe brut correspond au mot de passe encodé : " + matches);
+
+		if (matches) {
+			System.out.println("Test réussi !");
+		} else {
+			System.out.println("Test échoué !");
+		}
+	}
+
+
 }

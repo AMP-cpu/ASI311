@@ -5,6 +5,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 /**
  * Classe principale pour executer un traitement et s'arreter ensuite.
  */
+
 public class MyfilmlistMain {
 
 	public static void main(String[] args) {
@@ -49,6 +50,10 @@ public class MyfilmlistMain {
 
 		System.out.println("--------------------");
 		myFilmListTests.testUpdateRealisateurCelebres();
+
+		System.out.println("--------------------");
+		myFilmListTests.createAndAuthenticateUserTest();
+
 	}
 
 }

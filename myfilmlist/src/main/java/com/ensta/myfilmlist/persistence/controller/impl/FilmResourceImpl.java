@@ -20,6 +20,8 @@ import org.springframework.http.MediaType;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 @RestController
 @RequestMapping("/film")
 @CrossOrigin(origins = "http://localhost:3000") // Allow requests from your React app
@@ -65,8 +67,10 @@ public class FilmResourceImpl implements FilmResource {
     @ApiOperation(value = "Cree un nouveau film", notes = "Cree un nouveau film en passant ses attributs par le body.", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Le film a été crée correctement"),
+            @ApiResponse(code = 400, message = "Le film n'a pas pu etre cree")
     })
     @Override
+    @Transactional
     public ResponseEntity<FilmDTO> createFilm(@RequestBody FilmForm filmForm) throws ControllerException {
         try {
             FilmDTO createdFilm = myFilmsService.createFilm(filmForm);
@@ -83,6 +87,7 @@ public class FilmResourceImpl implements FilmResource {
             @ApiResponse(code = 404, message = "Le film n'a pas été trouvé")
     })
     @Override
+    @Transactional
     public ResponseEntity<?> deleteFilm(long ID) throws ControllerException {
         try {
             FilmDTO film = myFilmsService.findFilmById(ID);

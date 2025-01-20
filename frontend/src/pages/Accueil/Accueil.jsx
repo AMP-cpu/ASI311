@@ -1,67 +1,143 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import "./Accueil.css";
 
+const API_KEY = "17eb4502"; // OMDb API key
+
 export const Accueil = () => {
   const [movies, setMovies] = useState([]);
-  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [omdbData, setOmdbData] = useState({});
+  const [scrollingLeft, setScrollingLeft] = useState(false);
+  const [scrollingRight, setScrollingRight] = useState(false);
 
-  // Fetch movies from your database
+  useEffect(() => {
+    let scrollInterval;
+
+    if (scrollingLeft) {
+      scrollInterval = setInterval(() => {
+        const carousel = document.getElementById("movie-carousel");
+        carousel.scrollLeft -= 10; // Adjust this value to control scroll speed
+      }, 20); // Adjust the interval for scroll speed
+    } else if (scrollingRight) {
+      scrollInterval = setInterval(() => {
+        const carousel = document.getElementById("movie-carousel");
+        carousel.scrollLeft += 10; // Adjust this value to control scroll speed
+      }, 20); // Adjust the interval for scroll speed
+    }
+
+    // Cleanup on mouse leave
+    return () => clearInterval(scrollInterval);
+  }, [scrollingLeft, scrollingRight]);
+
   useEffect(() => {
     axios
       .get("http://localhost:8080/film")
       .then((response) => {
-        console.log("Movies fetched:", response.data);
         setMovies(response.data);
+        response.data.forEach((movie) => {
+          fetchMovieDetails(movie.titre);
+        });
       })
       .catch((error) => {
         console.error("Error fetching movies:", error);
       });
   }, []);
 
-  // Handle movie click
-  const handleMovieClick = (movie) => {
-    setSelectedMovie(movie); // Set the clicked movie as the selected one
+  const handleMouseEnterLeft = () => {
+    setScrollingLeft(true);
+    setScrollingRight(false);
   };
+
+  const handleMouseEnterRight = () => {
+    setScrollingRight(true);
+    setScrollingLeft(false);
+  };
+
+  const handleMouseLeave = () => {
+    setScrollingLeft(false);
+    setScrollingRight(false);
+  };
+
+  // Fetch additional movie details (including images) from OMDb API
+  const fetchMovieDetails = async (movieTitle) => {
+    try {
+      const response = await axios.get(
+        `https://www.omdbapi.com/?apikey=${API_KEY}&t=${encodeURIComponent(movieTitle)}`
+      );
+
+      if (response.data.Response === "True") {
+        setOmdbData((prevData) => ({
+          ...prevData,
+          [movieTitle]: response.data,
+        }));
+      } else {
+        console.log("Movie not found");
+      }
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
+    }
+  };
+
+  // Scroll functions for left and right
+  const scrollLeft = () => {
+    const carousel = document.getElementById("movie-carousel");
+    carousel.scrollLeft -= 10; // Adjust this value to control scroll speed
+  };
+
+  const scrollRight = () => {
+    const carousel = document.getElementById("movie-carousel");
+    carousel.scrollLeft += 10; // Adjust this value to control scroll speed
+  };
+  
 
   return (
     <div className="accueil">
       <h1>Welcome to the Movie Gallery</h1>
-        <ul className="movie-list">
+      <div className="movie-carousel-container">
+        <h1>Favorite movies</h1>
+        <div
+          id="movie-carousel"
+          className="movie-carousel"
+        >
           {movies.map((movie) => (
-            <li
-              key={movie.id}
-              className="movie-item"
-              onClick={() => handleMovieClick(movie)}
-            >
-              <p className="movie-title">{movie.titre}</p>
-              <p className="movie-director">
-                {movie.realisateur.prenom} {movie.realisateur.nom}{" "}
-                {/* Show trophy icon if filmRealises is empty */}
-                <span role="img" aria-label="trophy">
-                  🏆
-                </span>
-              </p>
-              <p className="savoir-plus">En savoir plus &gt;&gt;</p>
-            </li>
+            <Link to={`/movie/${movie.id}`} key={movie.id} className="movie-card">
+              {omdbData[movie.titre] && omdbData[movie.titre].Poster ? (
+                <img
+                  src={omdbData[movie.titre].Poster}
+                  alt={movie.titre}
+                  className="movie-poster"
+                />
+              ) : (
+                <div className="placeholder">No Image Available</div>
+              )}
+              <div className="movie-info">
+                <p className="movie-title">{movie.titre}</p>
+                <p className="movie-director">
+                  {movie.realisateur.prenom} {movie.realisateur.nom} 🏆
+                </p>
+              </div>
+            </Link>
           ))}
-        </ul>
-        {selectedMovie ? (
-        // Display black overlay with movie details
-        <div className="overlay" onClick={() => setSelectedMovie(null)}>
-          <div className="movie-details">
-            {/* <button onClick={() => setSelectedMovie(null)}>Back to Gallery</button> */}
-            <h2>{selectedMovie.titre}</h2>
-            {/* <p>{selectedMovie.description}</p> */}
-            <h3>Réalisateur</h3>
-            {selectedMovie.realisateur.prenom} {selectedMovie.realisateur.nom}{" "}
-                {/* Show trophy icon if filmRealises is empty */}
-                <span role="img" aria-label="trophy">
-                  🏆
-                </span>
-          </div>
         </div>
-      ) : null}
+
+        <div
+          className="arrow-left"
+          onMouseEnter={handleMouseEnterLeft}
+          onMouseLeave={handleMouseLeave}
+        >
+          &#8592;
+        </div>
+
+        <div
+          className="arrow-right"
+          onMouseEnter={handleMouseEnterRight}
+          onMouseLeave={handleMouseLeave}
+        >
+          &#8594;
+        </div>
+
+      </div>
     </div>
   );
 };

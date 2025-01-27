@@ -12,9 +12,11 @@ import com.ensta.myfilmlist.mapper.RealisateurMapper;
 import com.ensta.myfilmlist.model.Film;
 import com.ensta.myfilmlist.model.Realisateur;
 import com.ensta.myfilmlist.model.Utilisateur;
+import com.ensta.myfilmlist.model.UtilisateurFilm;
 import com.ensta.myfilmlist.service.MyFilmsService;
 import com.ensta.myfilmlist.exception.ServiceException;
 
+import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -232,7 +234,7 @@ public class MyFilmsServiceImpl implements MyFilmsService {
     }
 
     @Override
-    public List<FilmDTO> findUserFilms(long userId) throws ServiceException {
+    public List<FilmDTO> findUserFavoriteFilms(long userId) throws ServiceException {
         try {
             List<Film> films = utilisateurFilmDAO.findByUserId(userId);
 
@@ -256,6 +258,60 @@ public class MyFilmsServiceImpl implements MyFilmsService {
             return optionalAvgNote.orElse(null);
         } catch (Exception e) {
             throw new ServiceException("Erreur lors de la récupération de la moyenne de la note", e);
+        }
+    }
+
+    @Override
+    public Integer findFilmPersonalNote(long filmId, long userId) throws ServiceException {
+        try {
+            Optional<UtilisateurFilm> optionalPersonalNote = utilisateurFilmDAO.findByUserAndFilmId(userId, filmId);
+            return optionalPersonalNote.map(UtilisateurFilm::getNote).orElse(null);
+
+        } catch (Exception e) {
+            throw new ServiceException("Erreur lors de la récupération de la note de l'utilisateur", e);
+        }
+    }
+
+    private void setFilmFavorite(long filmId, long userId, boolean isFavorite) throws ServiceException {
+        try {
+            Optional<UtilisateurFilm> optUF = utilisateurFilmDAO.findByUserAndFilmId(userId, filmId);
+            if (optUF.isPresent()) {
+                UtilisateurFilm uf = optUF.get();
+                uf.setIsFavorite(isFavorite);
+                utilisateurFilmDAO.update(uf);
+            } else {
+                UtilisateurFilm uf = new UtilisateurFilm(userId, filmId, null, isFavorite);
+                utilisateurFilmDAO.save(uf);
+            }
+        } catch (Exception e) {
+            throw new ServiceException("Erreur lors de la mise à jour du film favoris", e);
+        }
+    }
+
+    @Override
+    public void addFilmToFavorite(long filmId, long userId) throws ServiceException {
+        setFilmFavorite(filmId, userId, true);
+    }
+
+    @Override
+    public void removeFilmFromFavorite(long filmId, long userId) throws ServiceException {
+        setFilmFavorite(filmId, userId, false);
+    }
+
+    @Override
+    public void evalFilm(long filmId, long userId, int note) throws ServiceException {
+        try {
+            Optional<UtilisateurFilm> optUF = utilisateurFilmDAO.findByUserAndFilmId(userId, filmId);
+            if (optUF.isPresent()) {
+                UtilisateurFilm uf = optUF.get();
+                uf.setNote(note);
+                utilisateurFilmDAO.update(uf);
+            } else {
+                UtilisateurFilm uf = new UtilisateurFilm(userId, filmId, note, null);
+                utilisateurFilmDAO.save(uf);
+            }
+        } catch (Exception e) {
+            throw new ServiceException("Erreur lors de la mise à jour du film favoris", e);
         }
     }
 

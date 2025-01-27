@@ -13,12 +13,13 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class JdbcUtilisateurFilmDAO implements UtilisateurFilmDAO {
-    private static final String CREATE_UTILISATEUR_FILM_QUERY = "INSERT INTO UtilisateurFilm (utilisateur_id, film_id, note, is_favoris) VALUES (?, ?, ?, ?)";
+    private static final String CREATE_UTILISATEUR_FILM_QUERY = "INSERT INTO UtilisateurFilm (utilisateur_id, film_id, note, is_favorite) VALUES (?, ?, ?, ?)";
     private JdbcTemplate jdbcTemplate = ConnectionManager.getJdbcTemplate();
     @Override
     public List<Film> findByUserId(long userId) {
@@ -35,18 +36,17 @@ public class JdbcUtilisateurFilmDAO implements UtilisateurFilmDAO {
 
     @Override
     public Optional<UtilisateurFilm> findByUserAndFilmId(long userId, long filmId) {
-        String sql = "SELECT uf.utilisateur_id, uf.film_id, uf.note FROM UtilisateurFilm uf WHERE uf.utilisateur_id = ? AND uf.film_id = ?";
+        String sql = "SELECT * FROM UtilisateurFilm WHERE utilisateur_id = ? AND film_id = ?";
 
         try {
             UtilisateurFilm utilisateurFilm = jdbcTemplate.queryForObject(
                     sql,
                     new Object[]{userId, filmId},
                     (rs, rowNum) -> new UtilisateurFilm(
-                            rs.getLong("id"),
                             rs.getLong("utilisateur_id"),
                             rs.getLong("film_id"),
                             rs.getInt("note"),
-                            rs.getBoolean("is_favoris")
+                            rs.getBoolean("is_favorite")
                     )
             );
             return Optional.of(utilisateurFilm);
@@ -67,33 +67,57 @@ public class JdbcUtilisateurFilmDAO implements UtilisateurFilmDAO {
         );
     }
 
-    @Override
     public UtilisateurFilm save(UtilisateurFilm utilisateurFilm) {
-        KeyHolder keyHolder = new GeneratedKeyHolder();
         PreparedStatementCreator creator = conn -> {
-            PreparedStatement statement = conn.prepareStatement(CREATE_UTILISATEUR_FILM_QUERY, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = conn.prepareStatement(CREATE_UTILISATEUR_FILM_QUERY);
             statement.setLong(1, utilisateurFilm.getUserId());
             statement.setLong(2, utilisateurFilm.getFilmId());
-            statement.setInt(3, utilisateurFilm.getNote());
-            statement.setBoolean(4, utilisateurFilm.isFavoris());
+
+            // Handle nullable fields properly
+            if (utilisateurFilm.getNote() != null) {
+                statement.setInt(3, utilisateurFilm.getNote());
+            } else {
+                statement.setNull(3, Types.INTEGER);
+            }
+
+            if (utilisateurFilm.isFavorite() != null) {
+                statement.setBoolean(4, utilisateurFilm.isFavorite());
+            } else {
+                statement.setNull(4, Types.BOOLEAN);
+            }
+
             return statement;
         };
-        jdbcTemplate.update(creator, keyHolder);
-        utilisateurFilm.setId(keyHolder.getKey().longValue());
-        return utilisateurFilm;
+
+        jdbcTemplate.update(creator);
+        return utilisateurFilm; // Return the object without setting an auto-generated ID
     }
 
     @Override
     public UtilisateurFilm update(UtilisateurFilm utilisateurFilm) {
-        String sql = "UPDATE UtilisateurFilm SET note = ?, is_favoris = ? WHERE utilisateur_id = ? AND film_id = ?";
+        String sql = "UPDATE UtilisateurFilm SET note = ?, is_favorite = ? WHERE utilisateur_id = ? AND film_id = ?";
 
-        jdbcTemplate.update(
-                sql,
-                utilisateurFilm.getNote(),
-                utilisateurFilm.isFavoris(),
-                utilisateurFilm.getUserId(),
-                utilisateurFilm.getFilmId()
-        );
+        jdbcTemplate.update(connection -> {
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            // Handle nullable fields properly
+            if (utilisateurFilm.getNote() != null) {
+                statement.setInt(1, utilisateurFilm.getNote());
+            } else {
+                statement.setNull(1, Types.INTEGER);
+            }
+
+            if (utilisateurFilm.isFavorite() != null) {
+                statement.setBoolean(2, utilisateurFilm.isFavorite());
+            } else {
+                statement.setNull(2, Types.BOOLEAN);
+            }
+
+            statement.setLong(3, utilisateurFilm.getUserId());
+            statement.setLong(4, utilisateurFilm.getFilmId());
+
+            return statement;
+        });
 
         return utilisateurFilm;
     }

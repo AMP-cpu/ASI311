@@ -1,31 +1,22 @@
 package com.ensta.myfilmlist.model;
 
 public class UtilisateurFilm {
-    private long id;
     private long userId;
     private long filmId;
-    private int note;
-    private boolean isFavoris;
+    private Integer note;
+    private Boolean isFavorite;
 
-    public UtilisateurFilm(long id, long userId, long filmId,int note,boolean isFavoris) {
-        this.id = id;
+    public UtilisateurFilm(long userId, long filmId,Integer note,Boolean isFavorite) {
         this.userId = userId;
         this.filmId = filmId;
         this.note = note;
-        this.isFavoris = isFavoris;
+        this.isFavorite = isFavorite;
     }
 
-    public long getId() {
-        return id;
-    }
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public int getNote() {
+    public Integer getNote() {
         return note;
     }
-    public void setNote(int note) {
+    public void setNote(Integer note) {
         this.note = note;
     }
 
@@ -43,10 +34,10 @@ public class UtilisateurFilm {
         this.filmId = filmId;
     }
 
-    public boolean isFavoris() {
-        return isFavoris;
+    public Boolean isFavorite() {
+        return isFavorite;
     }
-    public void setIsFavoris(boolean favoris) {
-        isFavoris = favoris;
+    public void setIsFavorite(Boolean favorite) {
+        isFavorite = favorite;
     }
 }

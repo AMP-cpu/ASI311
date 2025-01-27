@@ -12,5 +12,4 @@ public interface UtilisateurFilmDAO {
     Optional<Double> findFilmAverageNote(long filmId);
     UtilisateurFilm save(UtilisateurFilm utilisateurFilm);
     UtilisateurFilm update(UtilisateurFilm utilisateurFilm);
-
 }

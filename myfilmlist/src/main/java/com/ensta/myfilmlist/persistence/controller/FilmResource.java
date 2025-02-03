@@ -6,7 +6,6 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.ensta.myfilmlist.dto.FilmDTO;
 import com.ensta.myfilmlist.exception.ControllerException;
@@ -31,5 +30,14 @@ public interface FilmResource {
 
     @DeleteMapping("/{id}")
     ResponseEntity<?> deleteFilm(@Valid @PathVariable("id") long id) throws ControllerException;
+
+    @GetMapping("/favorite/{userId}")
+    ResponseEntity<List<FilmDTO>> findUserFavoriteFilms(@PathVariable("userId") long userId) throws ControllerException;
     
+    @PostMapping("/favorite/{filmId}/{userId}")
+    ResponseEntity<String> addFilmToFavorite(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) throws ControllerException;
+
+    @DeleteMapping("/favorite/{filmId}/{userId}")
+    ResponseEntity<String> removeFilmToFavorite(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) throws ControllerException;
+
 }

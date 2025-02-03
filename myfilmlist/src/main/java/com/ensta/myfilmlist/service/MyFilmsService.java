@@ -29,7 +29,7 @@ public interface MyFilmsService {
     RealisateurDTO createRealisateur(RealisateurForm realisateurForm) throws ServiceException;
     RealisateurDTO findRealisateurById(long id) throws ServiceException;
 
-    List<FilmDTO> findUserFavoriteFilms(long userId) throws ServiceException;
+    List<FilmDTO> findUserFavoriteFilms(long userId) throws ServiceException; //esse
     Double findFilmAverageNote(long filmId) throws ServiceException;
     Integer findFilmPersonalNote(long filmId, long userId) throws ServiceException;
     void addFilmToFavorite(long filmId, long userId) throws ServiceException; // esse

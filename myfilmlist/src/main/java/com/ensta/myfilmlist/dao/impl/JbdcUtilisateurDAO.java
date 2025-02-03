@@ -22,12 +22,7 @@ public class JbdcUtilisateurDAO implements UtilisateurDAO {
     private static final String CREATE_UTILISATEUR_QUERY = "INSERT INTO Utilisateur (email, password, nom, prenom) VALUES (?, ?, ?, ?)";
     private JdbcTemplate jdbcTemplate = ConnectionManager.getJdbcTemplate();
 
-    private final PasswordEncoder passwordEncoder;
-
-    // Injecter le PasswordEncoder via le constructeur
-    public JbdcUtilisateurDAO(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+    
 
     @Override
     public Optional<Utilisateur> findByEmail(String email) {
@@ -49,7 +44,7 @@ public class JbdcUtilisateurDAO implements UtilisateurDAO {
     @Override
     public Utilisateur save(Utilisateur utilisateur) {
         // Encoder le mot de passe avant de l'insérer
-        utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
+        utilisateur.setPassword(utilisateur.getPassword());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         PreparedStatementCreator creator = conn -> {

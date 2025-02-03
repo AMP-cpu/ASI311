@@ -236,7 +236,7 @@ public class MyFilmsServiceImpl implements MyFilmsService {
     @Override
     public List<FilmDTO> findUserFavoriteFilms(long userId) throws ServiceException {
         try {
-            List<Film> films = utilisateurFilmDAO.findByUserId(userId);
+            List<Film> films = utilisateurFilmDAO.findByUserId(userId, true);
 
             List<FilmDTO> filmDTOs = new ArrayList<>();
             for (Film film : films) {

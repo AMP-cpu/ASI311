@@ -117,10 +117,9 @@ public class MyfilmlistTests {
 	 */
 	public void calculerDureeTotaleTest() {
 		// Creation des films
-
-	Film laCommunauteDeLAnneau = new Film();
-	laCommunauteDeLAnneau.setTitre("La communauté de l'anneau");
-	laCommunauteDeLAnneau.setDuree(178);
+		Film laCommunauteDeLAnneau = new Film();
+		laCommunauteDeLAnneau.setTitre("La communauté de l'anneau");
+		laCommunauteDeLAnneau.setDuree(178);
 
 		Film lesDeuxTours = new Film();
 		lesDeuxTours.setTitre("Les deux tours");
@@ -216,7 +215,7 @@ public class MyfilmlistTests {
 	 * Permet de tester la recuperation des films.
 	 */
 	public void findAllFilmsTest() {
-	try {
+		try {
 			List<FilmDTO> films = myFilmsService.findAllFilms();
 
 			// Attendue : 4
@@ -262,6 +261,71 @@ public class MyfilmlistTests {
 		try {
 			FilmDTO avatar = myFilmsService.findFilmById(2);
 			System.out.println("Le film avec l'identifiant 2 est : " + avatar);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Permet de tester la recuperation d'un film par son identifiant.
+	 */
+	public void addFilmToFavoriteTest() {
+		try {
+			myFilmsService.addFilmToFavorite(1, 1);
+			myFilmsService.addFilmToFavorite(2, 1);
+			myFilmsService.addFilmToFavorite(3, 1);
+			myFilmsService.addFilmToFavorite(4, 1);
+			List<FilmDTO> favFilms = myFilmsService.findUserFavoriteFilms(1);
+			favFilms.forEach(System.out::println);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Permet de tester la recuperation d'un film par son identifiant.
+	 */
+	public void removeFilmToFavoriteTest() {
+		try {
+			myFilmsService.removeFilmFromFavorite(2, 1);
+			myFilmsService.removeFilmFromFavorite(3, 1);
+			List<FilmDTO> favFilms = myFilmsService.findUserFavoriteFilms(1);
+			favFilms.forEach(System.out::println);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Permet de tester la recuperation d'un film par son identifiant.
+	 */
+	public void evalFilmTest() {
+		try {
+			myFilmsService.evalFilm(1, 2, 16);
+			myFilmsService.evalFilm(2, 2, 18);
+			myFilmsService.evalFilm(4, 2, 18);
+
+			myFilmsService.evalFilm(1, 1, 10);
+			myFilmsService.evalFilm(4, 1, 15);
+			Double film1AvgNote = myFilmsService.findFilmAverageNote(1);
+			Double film2AvgNote = myFilmsService.findFilmAverageNote(2);
+			Double film3AvgNote = myFilmsService.findFilmAverageNote(3);
+			Double film4AvgNote = myFilmsService.findFilmAverageNote(4);
+
+			Integer film1PerNote = myFilmsService.findFilmPersonalNote(1, 1);
+			Integer film2PerNote = myFilmsService.findFilmPersonalNote(2, 1);
+			Integer film3PerNote = myFilmsService.findFilmPersonalNote(3, 1);
+			Integer film4PerNote = myFilmsService.findFilmPersonalNote(4, 1);
+
+			System.out.println("Film1 Avg Note: " + film1AvgNote);
+			System.out.println("Film2 Avg Note: " + film2AvgNote);
+			System.out.println("Film3 Avg Note: " + film3AvgNote);
+			System.out.println("Film4 Avg Note: " + film4AvgNote);
+
+			System.out.println("Film1 Personal Note: " + film1PerNote);
+			System.out.println("Film2 Personal Note: " + film2PerNote);
+			System.out.println("Film3 Personal Note: " + film3PerNote);
+			System.out.println("Film4 Personal Note: " + film4PerNote);
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}

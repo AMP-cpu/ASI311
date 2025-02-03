@@ -51,6 +51,12 @@ public class MyfilmlistMain {
 		System.out.println("--------------------");
 		myFilmListTests.testUpdateRealisateurCelebres();
 
+		System.out.println("--------------------");
+		myFilmListTests.addFilmToFavoriteTest();
+		myFilmListTests.removeFilmToFavoriteTest();
+
+		System.out.println("--------------------");
+		myFilmListTests.evalFilmTest();
 	}
 
 }

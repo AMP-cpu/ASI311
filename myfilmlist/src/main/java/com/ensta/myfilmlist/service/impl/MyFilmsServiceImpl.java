@@ -200,7 +200,7 @@ public class MyFilmsServiceImpl implements MyFilmsService {
         try {
             Film film = FilmMapper.convertFilmFormToFilm(filmForm);
             Realisateur realisateur = realisateurOpt.get();
-            film.setRealisateur(realisateur);
+            film.setRealisateur(realisateur);   
             film = filmDAO.save(film);
             updateRealisateurCelebre(realisateur);
             return FilmMapper.convertFilmToFilmDTO(film);

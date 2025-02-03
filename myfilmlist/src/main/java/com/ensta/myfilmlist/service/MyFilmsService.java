@@ -32,7 +32,7 @@ public interface MyFilmsService {
     List<FilmDTO> findUserFavoriteFilms(long userId) throws ServiceException;
     Double findFilmAverageNote(long filmId) throws ServiceException;
     Integer findFilmPersonalNote(long filmId, long userId) throws ServiceException;
-    void addFilmToFavorite(long filmId, long userId) throws ServiceException;
-    void removeFilmFromFavorite(long filmId, long userId) throws ServiceException;
+    void addFilmToFavorite(long filmId, long userId) throws ServiceException; // esse
+    void removeFilmFromFavorite(long filmId, long userId) throws ServiceException; //esse
     void evalFilm(long filmId, long userId, int note) throws ServiceException;
 }

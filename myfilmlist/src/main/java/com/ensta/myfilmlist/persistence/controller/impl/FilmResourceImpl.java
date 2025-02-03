@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -103,4 +104,114 @@ public class FilmResourceImpl implements FilmResource {
             throw new ControllerException("Error in deleting film.", e);
         }
     }
+
+    @ApiOperation(value = "Ajoute un film a la liste de favorits par filmId et userId")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Film added to favorites!"),
+            @ApiResponse(code = 404, message = "Error in adding film to favorites.")
+    })
+    @Override
+    public ResponseEntity<String> addFilmToFavorite(long filmID, long userId) throws ControllerException {
+        try {
+            FilmDTO film = myFilmsService.findFilmById(filmID);
+
+            if (film == null) {
+                return ResponseEntity.notFound().build();
+            }else{
+                myFilmsService.addFilmToFavorite(filmID, userId);
+            }
+
+            return ResponseEntity.ok("Film added to favorits!");
+        } catch (Exception e) {
+            throw new ControllerException("Error in adding film to favorites.", e);
+        }
+    }
+
+    
+    @ApiOperation(value = "Liste les filmes préférés d'un utilisateur par son ID")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "La liste des films préférés a été renvoyée correctement"),
+            @ApiResponse(code = 404, message = "Error in searching for favorite user films.")
+    })
+    @Override
+    public ResponseEntity<List<FilmDTO>> findUserFavoriteFilms(long userId) throws ControllerException {
+        try {
+            List<FilmDTO> films = myFilmsService.findUserFavoriteFilms(userId);
+            
+            return ResponseEntity.ok(films);
+        } catch (Exception e) {
+            throw new ControllerException("Error in searching for favorite user films.", e);
+        }
+    }
+    
+    @ApiOperation(value = "Supprime un film de la liste de favorits par filmId et userId")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Film removed to favorites!"),
+            @ApiResponse(code = 404, message = "Error in removing film from favorites.")
+    })
+    @Override
+    public ResponseEntity<String> removeFilmToFavorite(long filmID, long userId) throws ControllerException {
+        try {
+            FilmDTO film = myFilmsService.findFilmById(filmID);
+
+            if (film == null) {
+                return ResponseEntity.notFound().build();
+            }else{
+                myFilmsService.removeFilmFromFavorite(filmID, userId);
+            }
+
+            return ResponseEntity.ok("Film removed from favorits!");
+        } catch (Exception e) {
+            throw new ControllerException("Error in removing film from favorites.", e);
+        }
+    }
+
+    @ApiOperation(value = "Récupérer la note moyenne d'un film")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "La note moyenne du film a été renvoyée correctement"),
+            @ApiResponse(code = 404, message = "Film non trouvé")
+    })
+    @Override
+    public ResponseEntity<Double> findFilmAverageNote(long filmId) throws ControllerException {
+        try {
+            Double averageNote = myFilmsService.findFilmAverageNote(filmId);
+            return ResponseEntity.ok(averageNote);
+        } catch (Exception e) {
+            throw new ControllerException("Error retrieving film average note.", e);
+        }
+    }
+
+    @ApiOperation(value = "Récupérer la note personnelle d'un utilisateur pour un film")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "La note personnelle a été renvoyée correctement"),
+            @ApiResponse(code = 404, message = "Film ou note non trouvé")
+    })
+    @Override
+    public ResponseEntity<Integer> findFilmPersonalNote(long filmId, long userId) throws ControllerException {
+        try {
+            Integer personalNote = myFilmsService.findFilmPersonalNote(filmId, userId);
+            return ResponseEntity.ok(personalNote);
+        } catch (Exception e) {
+            throw new ControllerException("Error retrieving personal note for film.", e);
+        }
+    }
+
+    @ApiOperation(value = "Évaluer un film")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Le film a été évalué correctement"),
+            @ApiResponse(code = 400, message = "Note invalide"),
+            @ApiResponse(code = 404, message = "Film non trouvé")
+    })
+    @Override
+    public ResponseEntity<String> evalFilm(long filmId, long userId, int note) throws ControllerException {
+        try {
+            myFilmsService.evalFilm(filmId, userId, note);
+            return ResponseEntity.ok("Film évalué avec succès!");
+        } catch (Exception e) {
+            throw new ControllerException("Error evaluating film.", e);
+        }
+    }
+
+
+
 }

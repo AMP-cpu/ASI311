@@ -30,11 +30,11 @@ public interface MyFilmsService {
     RealisateurDTO createRealisateur(RealisateurForm realisateurForm) throws ServiceException;
     RealisateurDTO findRealisateurById(long id) throws ServiceException;
 
-    List<FilmDTO> findUserFavoriteFilms(long userId) throws ServiceException;
+    List<FilmDTO> findUserFavoriteFilms(long userId) throws ServiceException; 
     Double findFilmAverageNote(long filmId) throws ServiceException;
     Integer findFilmPersonalNote(long filmId, long userId) throws ServiceException;
-    void addFilmToFavorite(long filmId, long userId) throws ServiceException; // esse
-    void removeFilmFromFavorite(long filmId, long userId) throws ServiceException; //esse
+    void addFilmToFavorite(long filmId, long userId) throws ServiceException; 
+    void removeFilmFromFavorite(long filmId, long userId) throws ServiceException;
     void evalFilm(long filmId, long userId, int note) throws ServiceException;
 
     Utilisateur login(String email, String password) throws ServiceException;

@@ -6,7 +6,6 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import com.ensta.myfilmlist.dto.FilmDTO;
 import com.ensta.myfilmlist.exception.ControllerException;
@@ -31,5 +30,24 @@ public interface FilmResource {
 
     @DeleteMapping("/{id}")
     ResponseEntity<?> deleteFilm(@Valid @PathVariable("id") long id) throws ControllerException;
+
+    @GetMapping("/favorite/{userId}")
+    ResponseEntity<List<FilmDTO>> findUserFavoriteFilms(@PathVariable("userId") long userId) throws ControllerException;
     
+    @PostMapping("/favorite/{filmId}/{userId}")
+    ResponseEntity<String> addFilmToFavorite(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) throws ControllerException;
+
+    @DeleteMapping("/favorite/{filmId}/{userId}")
+    ResponseEntity<String> removeFilmToFavorite(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) throws ControllerException;
+
+    @GetMapping("/note/average/{filmId}")
+    ResponseEntity<Double> findFilmAverageNote(@PathVariable("filmId") long filmId) throws ControllerException;
+
+    @GetMapping("/note/personal/{filmId}/{userId}")
+    ResponseEntity<Integer> findFilmPersonalNote(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) throws ControllerException;
+
+    @PostMapping("/note/eval/{filmId}/{userId}/{note}")
+    ResponseEntity<String> evalFilm(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId, @PathVariable("note") int note) throws ControllerException;
+
+
 }

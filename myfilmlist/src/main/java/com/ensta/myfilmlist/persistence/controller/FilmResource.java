@@ -40,4 +40,14 @@ public interface FilmResource {
     @DeleteMapping("/favorite/{filmId}/{userId}")
     ResponseEntity<String> removeFilmToFavorite(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) throws ControllerException;
 
+    @GetMapping("/note/average/{filmId}")
+    ResponseEntity<Double> findFilmAverageNote(@PathVariable("filmId") long filmId) throws ControllerException;
+
+    @GetMapping("/note/personal/{filmId}/{userId}")
+    ResponseEntity<Integer> findFilmPersonalNote(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) throws ControllerException;
+
+    @PostMapping("/note/eval/{filmId}/{userId}/{note}")
+    ResponseEntity<String> evalFilm(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId, @PathVariable("note") int note) throws ControllerException;
+
+
 }

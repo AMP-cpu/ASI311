@@ -166,5 +166,52 @@ public class FilmResourceImpl implements FilmResource {
         }
     }
 
+    @ApiOperation(value = "Récupérer la note moyenne d'un film")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "La note moyenne du film a été renvoyée correctement"),
+            @ApiResponse(code = 404, message = "Film non trouvé")
+    })
+    @Override
+    public ResponseEntity<Double> findFilmAverageNote(long filmId) throws ControllerException {
+        try {
+            Double averageNote = myFilmsService.findFilmAverageNote(filmId);
+            return ResponseEntity.ok(averageNote);
+        } catch (Exception e) {
+            throw new ControllerException("Error retrieving film average note.", e);
+        }
+    }
+
+    @ApiOperation(value = "Récupérer la note personnelle d'un utilisateur pour un film")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "La note personnelle a été renvoyée correctement"),
+            @ApiResponse(code = 404, message = "Film ou note non trouvé")
+    })
+    @Override
+    public ResponseEntity<Integer> findFilmPersonalNote(long filmId, long userId) throws ControllerException {
+        try {
+            Integer personalNote = myFilmsService.findFilmPersonalNote(filmId, userId);
+            return ResponseEntity.ok(personalNote);
+        } catch (Exception e) {
+            throw new ControllerException("Error retrieving personal note for film.", e);
+        }
+    }
+
+    @ApiOperation(value = "Évaluer un film")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Le film a été évalué correctement"),
+            @ApiResponse(code = 400, message = "Note invalide"),
+            @ApiResponse(code = 404, message = "Film non trouvé")
+    })
+    @Override
+    public ResponseEntity<String> evalFilm(long filmId, long userId, int note) throws ControllerException {
+        try {
+            myFilmsService.evalFilm(filmId, userId, note);
+            return ResponseEntity.ok("Film évalué avec succès!");
+        } catch (Exception e) {
+            throw new ControllerException("Error evaluating film.", e);
+        }
+    }
+
+
 
 }

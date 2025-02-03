@@ -22,14 +22,14 @@ public class JdbcUtilisateurFilmDAO implements UtilisateurFilmDAO {
     private static final String CREATE_UTILISATEUR_FILM_QUERY = "INSERT INTO UtilisateurFilm (utilisateur_id, film_id, note, is_favorite) VALUES (?, ?, ?, ?)";
     private JdbcTemplate jdbcTemplate = ConnectionManager.getJdbcTemplate();
     @Override
-    public List<Film> findByUserId(long userId) {
+    public List<Film> findByUserId(long userId, boolean includeFavorite) {
         String sql = "SELECT f.id AS film_id, f.titre AS film_titre, f.duree AS film_duree, " +
                 "r.id AS realisateur_id, r.nom AS realisateur_nom, r.prenom AS realisateur_prenom, " +
                 "r.date_naissance AS realisateur_date_naissance, r.celebre AS realisateur_celebre " +
                 "FROM Film f " +
                 "INNER JOIN Realisateur r ON f.realisateur_id = r.id " +
                 "INNER JOIN UtilisateurFilm uf ON uf.film_id = f.id " +
-                "WHERE uf.utilisateur_id = ?";
+                "WHERE uf.utilisateur_id = ?" + (includeFavorite ? " AND uf.is_favorite = true " : "");
 
         return jdbcTemplate.query(sql, new Object[]{userId}, (rs, rowNum) -> JdbcFilmDAO.getFilmFrom(rs));
     }
@@ -45,8 +45,8 @@ public class JdbcUtilisateurFilmDAO implements UtilisateurFilmDAO {
                     (rs, rowNum) -> new UtilisateurFilm(
                             rs.getLong("utilisateur_id"),
                             rs.getLong("film_id"),
-                            rs.getInt("note"),
-                            rs.getBoolean("is_favorite")
+                            rs.getObject("note", Integer.class),      // Returns an Integer, handling null values
+                            rs.getObject("is_favorite", Boolean.class)  // Returns a Boolean, handling null values
                     )
             );
             return Optional.of(utilisateurFilm);
@@ -57,14 +57,17 @@ public class JdbcUtilisateurFilmDAO implements UtilisateurFilmDAO {
 
     @Override
     public Optional<Double> findFilmAverageNote(long filmId) {
-        String sql = "SELECT AVG(uf.note) as average_rating FROM UtilisateurFilm uf WHERE uf.film_id = ?";
-        return Optional.ofNullable(
-                jdbcTemplate.queryForObject(
-                        sql,
-                        new Object[]{filmId},
-                        (rs, rowNum) -> rs.getDouble("average_rating")
-                )
+        String sql = "SELECT AVG(CAST(uf.note AS DOUBLE PRECISION)) as average_rating " +
+                "FROM UtilisateurFilm uf " +
+                "WHERE uf.film_id = ? AND uf.note IS NOT NULL";
+
+        Double average = jdbcTemplate.queryForObject(
+                sql,
+                new Object[]{filmId},
+                (rs, rowNum) -> rs.getObject("average_rating", Double.class)
         );
+
+        return Optional.ofNullable(average);
     }
 
     public UtilisateurFilm save(UtilisateurFilm utilisateurFilm) {

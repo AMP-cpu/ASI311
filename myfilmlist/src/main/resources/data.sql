@@ -24,10 +24,10 @@ CREATE TABLE IF NOT EXISTS UtilisateurFilm (
 CREATE INDEX idx_utilisateur ON UtilisateurFilm(utilisateur_id);
 CREATE INDEX idx_film ON UtilisateurFilm(film_id);
 
-INSERT INTO UtilisateurFilm(utilisateur_id, film_id, note, is_favorite) VALUES(1, 1, 3, false);
-INSERT INTO UtilisateurFilm(utilisateur_id, film_id, note, is_favorite) VALUES(1, 2, 20, true);
-INSERT INTO UtilisateurFilm(utilisateur_id, film_id, note, is_favorite) VALUES(2, 1, 15, true);
-INSERT INTO UtilisateurFilm(utilisateur_id, film_id, note, is_favorite) VALUES(2, 2, 19, true);
+-- INSERT INTO UtilisateurFilm(utilisateur_id, film_id, note, is_favorite) VALUES(1, 1, 3, false);
+-- INSERT INTO UtilisateurFilm(utilisateur_id, film_id, note, is_favorite) VALUES(1, 2, 20, true);
+-- INSERT INTO UtilisateurFilm(utilisateur_id, film_id, note, is_favorite) VALUES(2, 1, 15, true);
+-- INSERT INTO UtilisateurFilm(utilisateur_id, film_id, note, is_favorite) VALUES(2, 2, 19, true);
 
 
 

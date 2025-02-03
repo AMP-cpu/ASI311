@@ -11,6 +11,7 @@ import com.ensta.myfilmlist.dto.FilmDTO;
 import java.util.List;
 import java.util.Optional;
 
+import com.ensta.myfilmlist.model.Utilisateur;
 import com.ensta.myfilmlist.model.UtilisateurFilm;
 import org.springframework.stereotype.Service;
 
@@ -29,10 +30,13 @@ public interface MyFilmsService {
     RealisateurDTO createRealisateur(RealisateurForm realisateurForm) throws ServiceException;
     RealisateurDTO findRealisateurById(long id) throws ServiceException;
 
-    List<FilmDTO> findUserFavoriteFilms(long userId) throws ServiceException;
+    List<FilmDTO> findUserFavoriteFilms(long userId) throws ServiceException; 
     Double findFilmAverageNote(long filmId) throws ServiceException;
     Integer findFilmPersonalNote(long filmId, long userId) throws ServiceException;
-    void addFilmToFavorite(long filmId, long userId) throws ServiceException;
+    void addFilmToFavorite(long filmId, long userId) throws ServiceException; 
     void removeFilmFromFavorite(long filmId, long userId) throws ServiceException;
     void evalFilm(long filmId, long userId, int note) throws ServiceException;
+
+    Utilisateur login(String email, String password) throws ServiceException;
+    Utilisateur signup(String email, String password, String prenom, String nom, boolean isAdmin) throws ServiceException;
 }

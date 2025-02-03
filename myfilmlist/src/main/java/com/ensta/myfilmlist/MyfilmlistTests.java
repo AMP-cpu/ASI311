@@ -17,8 +17,6 @@ import org.springframework.stereotype.Component;
 import com.ensta.myfilmlist.dao.UtilisateurDAO;
 import com.ensta.myfilmlist.dao.impl.JbdcUtilisateurDAO;
 import com.ensta.myfilmlist.model.Utilisateur;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional; // Utilisé pour le retour d'une valeur facultative de findByEmail
 
@@ -119,10 +117,9 @@ public class MyfilmlistTests {
 	 */
 	public void calculerDureeTotaleTest() {
 		// Creation des films
-
-	Film laCommunauteDeLAnneau = new Film();
-	laCommunauteDeLAnneau.setTitre("La communauté de l'anneau");
-	laCommunauteDeLAnneau.setDuree(178);
+		Film laCommunauteDeLAnneau = new Film();
+		laCommunauteDeLAnneau.setTitre("La communauté de l'anneau");
+		laCommunauteDeLAnneau.setDuree(178);
 
 		Film lesDeuxTours = new Film();
 		lesDeuxTours.setTitre("Les deux tours");
@@ -218,7 +215,7 @@ public class MyfilmlistTests {
 	 * Permet de tester la recuperation des films.
 	 */
 	public void findAllFilmsTest() {
-	try {
+		try {
 			List<FilmDTO> films = myFilmsService.findAllFilms();
 
 			// Attendue : 4
@@ -266,6 +263,99 @@ public class MyfilmlistTests {
 			System.out.println("Le film avec l'identifiant 2 est : " + avatar);
 		} catch (ServiceException e) {
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Permet de tester la recuperation d'un film par son identifiant.
+	 */
+	public void addFilmToFavoriteTest() {
+		try {
+			myFilmsService.addFilmToFavorite(1, 1);
+			myFilmsService.addFilmToFavorite(2, 1);
+			myFilmsService.addFilmToFavorite(3, 1);
+			myFilmsService.addFilmToFavorite(4, 1);
+			List<FilmDTO> favFilms = myFilmsService.findUserFavoriteFilms(1);
+			favFilms.forEach(System.out::println);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Permet de tester la recuperation d'un film par son identifiant.
+	 */
+	public void removeFilmToFavoriteTest() {
+		try {
+			myFilmsService.removeFilmFromFavorite(2, 1);
+			myFilmsService.removeFilmFromFavorite(3, 1);
+			List<FilmDTO> favFilms = myFilmsService.findUserFavoriteFilms(1);
+			favFilms.forEach(System.out::println);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Permet de tester la recuperation d'un film par son identifiant.
+	 */
+	public void evalFilmTest() {
+		try {
+			myFilmsService.evalFilm(1, 2, 16);
+			myFilmsService.evalFilm(2, 2, 18);
+			myFilmsService.evalFilm(4, 2, 18);
+
+			myFilmsService.evalFilm(1, 1, 10);
+			myFilmsService.evalFilm(4, 1, 15);
+			Double film1AvgNote = myFilmsService.findFilmAverageNote(1);
+			Double film2AvgNote = myFilmsService.findFilmAverageNote(2);
+			Double film3AvgNote = myFilmsService.findFilmAverageNote(3);
+			Double film4AvgNote = myFilmsService.findFilmAverageNote(4);
+
+			Integer film1PerNote = myFilmsService.findFilmPersonalNote(1, 1);
+			Integer film2PerNote = myFilmsService.findFilmPersonalNote(2, 1);
+			Integer film3PerNote = myFilmsService.findFilmPersonalNote(3, 1);
+			Integer film4PerNote = myFilmsService.findFilmPersonalNote(4, 1);
+
+			System.out.println("Film1 Avg Note: " + film1AvgNote);
+			System.out.println("Film2 Avg Note: " + film2AvgNote);
+			System.out.println("Film3 Avg Note: " + film3AvgNote);
+			System.out.println("Film4 Avg Note: " + film4AvgNote);
+
+			System.out.println("Film1 Personal Note: " + film1PerNote);
+			System.out.println("Film2 Personal Note: " + film2PerNote);
+			System.out.println("Film3 Personal Note: " + film3PerNote);
+			System.out.println("Film4 Personal Note: " + film4PerNote);
+		} catch (ServiceException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void loginTest() {
+		try {
+			// Good login credentials
+			Utilisateur utilisateur = myFilmsService.login("salima@salima.com", "salima");
+			System.out.println("Login success: " + utilisateur.getId());
+			// Bad password
+//			myFilmsService.login("salima@salima.com", "salima1");
+			// Bad email
+//			myFilmsService.login("salima1@salima.com", "salima1");
+		} catch (ServiceException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public void signupTest() {
+		try {
+			// Good login credentials
+			Utilisateur utilisateur = myFilmsService.signup("djo@djo.com", "djo", "djo", "djo", true);
+			System.out.println("Signup success: " + utilisateur.getId());
+			// Bad password
+//			myFilmsService.login("salima@salima.com", "salima1");
+			// Bad email
+//			myFilmsService.login("salima1@salima.com", "salima1");
+		} catch (ServiceException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 
@@ -324,43 +414,4 @@ public class MyfilmlistTests {
 			e.printStackTrace();
 		}
 	}
-	/**
-	 * Permet de tester la création et l'authentification d'un utilisateur avec un mot de passe encodé.
-	 */
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	public void createAndAuthenticateUserTest() {
-		// Récupération du DAO et du PasswordEncoder via Spring
-		UtilisateurDAO utilisateurDAO = new JbdcUtilisateurDAO(passwordEncoder);
-
-		// Création d'un utilisateur avec un mot de passe brut
-		Utilisateur utilisateur = new Utilisateur();
-		utilisateur.setEmail("testuser@example.com");
-		utilisateur.setPassword("plainpassword123"); // Mot de passe brut
-		utilisateur.setNom("Test");
-		utilisateur.setPrenom("User");
-
-		// Sauvegarder l'utilisateur (le mot de passe sera encodé)
-		utilisateurDAO.save(utilisateur);
-
-		// Afficher les informations sauvegardées
-		System.out.println("Utilisateur sauvegardé avec succès :");
-		System.out.println("Email : " + utilisateur.getEmail());
-		System.out.println("Mot de passe encodé : " + utilisateur.getPassword());
-
-		// Vérifier si l'utilisateur est correctement encodé
-		Utilisateur retrievedUser = utilisateurDAO.findByEmail("testuser@example.com").orElseThrow();
-		boolean matches = passwordEncoder.matches("plainpassword123", retrievedUser.getPassword());
-
-		// Afficher le résultat de la correspondance
-		System.out.println("Le mot de passe brut correspond au mot de passe encodé : " + matches);
-
-		if (matches) {
-			System.out.println("Test réussi !");
-		} else {
-			System.out.println("Test échoué !");
-		}
-	}
-
-
 }

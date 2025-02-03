@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -19,10 +18,12 @@ import java.util.Optional;
 @Repository
 public class JbdcUtilisateurDAO implements UtilisateurDAO {
 
-    private static final String CREATE_UTILISATEUR_QUERY = "INSERT INTO Utilisateur (email, password, nom, prenom) VALUES (?, ?, ?, ?)";
+    private static final String CREATE_UTILISATEUR_QUERY = "INSERT INTO Utilisateur (email, password, nom, prenom, is_admin) VALUES (?, ?, ?, ?, ?)";
     private JdbcTemplate jdbcTemplate = ConnectionManager.getJdbcTemplate();
 
-    
+
+    // Injecter le PasswordEncoder via le constructeur
+    public JbdcUtilisateurDAO() {}
 
     @Override
     public Optional<Utilisateur> findByEmail(String email) {
@@ -43,9 +44,6 @@ public class JbdcUtilisateurDAO implements UtilisateurDAO {
 
     @Override
     public Utilisateur save(Utilisateur utilisateur) {
-        // Encoder le mot de passe avant de l'insérer
-        utilisateur.setPassword(utilisateur.getPassword());
-
         KeyHolder keyHolder = new GeneratedKeyHolder();
         PreparedStatementCreator creator = conn -> {
             PreparedStatement statement = conn.prepareStatement(CREATE_UTILISATEUR_QUERY, Statement.RETURN_GENERATED_KEYS);
@@ -53,6 +51,7 @@ public class JbdcUtilisateurDAO implements UtilisateurDAO {
             statement.setString(2, utilisateur.getPassword()); // Mot de passe encodé
             statement.setString(3, utilisateur.getNom());
             statement.setString(4, utilisateur.getPrenom());
+            statement.setBoolean(5, utilisateur.isAdmin());
             return statement;
         };
         jdbcTemplate.update(creator, keyHolder);

@@ -5,8 +5,8 @@ export const Navbar = () => {
   return (
     <div>
       <div id="main-navbar" className="navbar">
-        <div className="logo">
-        </div>
+        <a href="/" className="logo">
+        </a>
         <nav>
           <ul>
             <li>

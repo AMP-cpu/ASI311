@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import './index.css';
 import reportWebVitals from './reportWebVitals';
-import { Home } from './components/Home/Home';
+import { Home } from './pages/Home/Home';
 import { Accueil } from './pages/Accueil/Accueil';
 import { Movie } from './pages/Movie/Movie';
 import { Navbar } from './components/Navbar/Navbar';

@@ -2,6 +2,7 @@ package com.ensta.myfilmlist.service.impl;
 
 import com.ensta.myfilmlist.dao.FilmDAO;
 import com.ensta.myfilmlist.dao.RealisateurDAO;
+import com.ensta.myfilmlist.dao.UtilisateurDAO;
 import com.ensta.myfilmlist.dao.UtilisateurFilmDAO;
 import com.ensta.myfilmlist.dto.FilmDTO;
 import com.ensta.myfilmlist.dto.RealisateurDTO;
@@ -30,16 +31,18 @@ public class MyFilmsServiceImpl implements MyFilmsService {
     private FilmDAO filmDAO;
     private RealisateurDAO realisateurDAO;
     private UtilisateurFilmDAO utilisateurFilmDAO;
+    private UtilisateurDAO utilisateurDAO;
 
     public MyFilmsServiceImpl(){
 
     }
 
     @Autowired
-    public MyFilmsServiceImpl(FilmDAO filmDAO, RealisateurDAO realisateurDAO, UtilisateurFilmDAO utilisateurFilmDAO){
+    public MyFilmsServiceImpl(FilmDAO filmDAO, RealisateurDAO realisateurDAO, UtilisateurFilmDAO utilisateurFilmDAO, UtilisateurDAO utilisateurDAO) {
         this.filmDAO = filmDAO;
-        this.realisateurDAO=realisateurDAO;
+        this.realisateurDAO = realisateurDAO;
         this.utilisateurFilmDAO = utilisateurFilmDAO;
+        this.utilisateurDAO = utilisateurDAO;
     }
 
     private void checkRealisateurOk(Realisateur realisateur) throws ServiceException {
@@ -200,7 +203,7 @@ public class MyFilmsServiceImpl implements MyFilmsService {
         try {
             Film film = FilmMapper.convertFilmFormToFilm(filmForm);
             Realisateur realisateur = realisateurOpt.get();
-            film.setRealisateur(realisateur);
+            film.setRealisateur(realisateur);   
             film = filmDAO.save(film);
             updateRealisateurCelebre(realisateur);
             return FilmMapper.convertFilmToFilmDTO(film);
@@ -236,7 +239,7 @@ public class MyFilmsServiceImpl implements MyFilmsService {
     @Override
     public List<FilmDTO> findUserFavoriteFilms(long userId) throws ServiceException {
         try {
-            List<Film> films = utilisateurFilmDAO.findByUserId(userId);
+            List<Film> films = utilisateurFilmDAO.findByUserId(userId, true);
 
             List<FilmDTO> filmDTOs = new ArrayList<>();
             for (Film film : films) {
@@ -313,6 +316,28 @@ public class MyFilmsServiceImpl implements MyFilmsService {
         } catch (Exception e) {
             throw new ServiceException("Erreur lors de la mise à jour du film favoris", e);
         }
+    }
+
+    @Override
+    public Utilisateur login(String email, String password) throws ServiceException {
+        Optional<Utilisateur> utilisateur = utilisateurDAO.findByEmail(email);
+        if (utilisateur.isEmpty()) {
+            throw new ServiceException("Utilisateur avec cet email n'existe pas");
+        }
+        if (!utilisateur.get().getPassword().equals(password)) {
+            throw new ServiceException("Mot de passe incorrect");
+        }
+        return utilisateur.get();
+    }
+
+    @Override
+    public Utilisateur signup(String email, String password, String prenom, String nom, boolean isAdmin) throws ServiceException {
+        Optional<Utilisateur> utilisateurOpt = utilisateurDAO.findByEmail(email);
+        if (utilisateurOpt.isPresent()) {
+            throw new ServiceException("Utilisateur avec cet email existe déjà");
+        }
+        Utilisateur utilisateur = new Utilisateur(email, password, prenom, nom);
+        return utilisateurDAO.save(utilisateur);
     }
 
     @Override

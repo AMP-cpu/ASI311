@@ -331,6 +331,34 @@ public class MyfilmlistTests {
 		}
 	}
 
+	public void loginTest() {
+		try {
+			// Good login credentials
+			Utilisateur utilisateur = myFilmsService.login("salima@salima.com", "salima");
+			System.out.println("Login success: " + utilisateur.getId());
+			// Bad password
+//			myFilmsService.login("salima@salima.com", "salima1");
+			// Bad email
+//			myFilmsService.login("salima1@salima.com", "salima1");
+		} catch (ServiceException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public void signupTest() {
+		try {
+			// Good login credentials
+			Utilisateur utilisateur = myFilmsService.signup("djo@djo.com", "djo", "djo", "djo", true);
+			System.out.println("Signup success: " + utilisateur.getId());
+			// Bad password
+//			myFilmsService.login("salima@salima.com", "salima1");
+			// Bad email
+//			myFilmsService.login("salima1@salima.com", "salima1");
+		} catch (ServiceException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
 	/**
 	 * Permet de tester la suppression d'un film avec son identifiant.
 	 */

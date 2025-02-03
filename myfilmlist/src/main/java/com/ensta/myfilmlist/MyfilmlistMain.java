@@ -57,6 +57,10 @@ public class MyfilmlistMain {
 
 		System.out.println("--------------------");
 		myFilmListTests.evalFilmTest();
+
+		System.out.println("--------------------");
+		myFilmListTests.loginTest();
+		myFilmListTests.signupTest();
 	}
 
 }

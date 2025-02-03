@@ -6,6 +6,16 @@ public class Utilisateur {
     private String password;
     private String prenom;
     private String nom;
+    private boolean isAdmin;
+
+    public Utilisateur() {}
+
+    public Utilisateur(String email, String password, String prenom, String nom) {
+        this.email = email;
+        this.password = password;
+        this.prenom = prenom;
+        this.nom = nom;
+    }
 
     // Getters and Setters
     public long getId() { return id; }
@@ -22,4 +32,7 @@ public class Utilisateur {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public boolean isAdmin() { return isAdmin; }
+    public void setAdmin(boolean isAdmin) { this.isAdmin = isAdmin; }
 }

@@ -39,4 +39,5 @@ public interface MyFilmsService {
 
     Utilisateur login(String email, String password) throws ServiceException;
     Utilisateur signup(String email, String password, String prenom, String nom, boolean isAdmin) throws ServiceException;
+
 }

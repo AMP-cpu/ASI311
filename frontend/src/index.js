@@ -1,18 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './index.css';
-import reportWebVitals from './reportWebVitals';
 import { Home } from './pages/Home/Home';
 import { Accueil } from './pages/Accueil/Accueil';
 import { Movie } from './pages/Movie/Movie';
 import { Navbar } from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
-import { NotFound } from './pages/NotFound/NotFound'; // Import the NotFound component
+import { NotFound } from './pages/NotFound/NotFound';
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+// Helper function to check if the user is logged in
+const isLoggedIn = () => {
+  return localStorage.getItem('isLoggedIn') === 'true'; // Check login status from localStorage
+};
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -21,14 +21,20 @@ root.render(
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/accueil" element={<Accueil />} />
-        <Route path="/movie/:movieId" element={<Movie />} />
-        
+
+        {/* Protecting routes with login check */}
+        <Route
+          path="/accueil"
+          element={isLoggedIn() ? <Accueil /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/movie/:movieId"
+          element={isLoggedIn() ? <Movie /> : <Navigate to="/" />}
+        />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
     <Footer />
   </React.StrictMode>
 );
-
-reportWebVitals();

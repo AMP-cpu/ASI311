@@ -75,7 +75,6 @@ export const Accueil = () => {
                 className="movie-card"
                 onClick={() => setSelectedMovie(omdbData[movie.titre])}
               >
-                {console.log(movie)}
                 {omdbData[movie.titre] && omdbData[movie.titre].Poster ? (
                   <img
                     src={omdbData[movie.titre].Poster}

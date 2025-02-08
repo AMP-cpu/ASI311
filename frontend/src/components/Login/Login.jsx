@@ -47,14 +47,9 @@ export const Login = ({ onClose }) => {
       }
 
       if (response.ok) {
-        localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userId", data.id);
         console.log(data.id)
         navigate("/accueil");
-        // onClose(); // Close modal on success
-
-        // // Redirect to the /accueil page after login
-        
       } else {
         setErrorMessage(data.message || "An error occurred");
       }

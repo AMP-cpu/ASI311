@@ -11,30 +11,32 @@ import { NotFound } from './pages/NotFound/NotFound';
 
 // Helper function to check if the user is logged in
 const isLoggedIn = () => {
-  return localStorage.getItem('isLoggedIn') === 'true'; // Check login status from localStorage
+  return localStorage.getItem('userId'); // Check login status from localStorage
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Navbar />
+    
     <Router>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
 
         {/* Protecting routes with login check */}
         <Route
           path="/accueil"
-          element={isLoggedIn() ? <Accueil /> : <Navigate to="/" />}
+          element={isLoggedIn ? <Accueil /> : <Navigate to="/" />}
         />
         <Route
           path="/movie/:movieId"
-          element={isLoggedIn() ? <Movie /> : <Navigate to="/" />}
+          element={isLoggedIn ? <Movie /> : <Navigate to="/" />}
         />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer />
     </Router>
-    <Footer />
+    
   </React.StrictMode>
 );

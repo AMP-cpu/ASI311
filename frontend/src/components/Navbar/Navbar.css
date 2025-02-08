@@ -36,3 +36,34 @@
     margin-left: 1rem;
     cursor: pointer;
   }
+
+  .user-tab {
+    position: relative;
+  }
+  
+  .dropdown {
+    position: absolute;
+    top: 40px;
+    left: -80px;
+    background-color: white;
+    color: black;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 120px;
+    text-align: center;
+  }
+  
+  .dropdown button {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px;
+  }
+  
+  .dropdown button:hover {
+    text-decoration: underline;
+  }
+  

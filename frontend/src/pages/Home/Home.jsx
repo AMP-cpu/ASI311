@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Home.css";
 import { Login } from "../../components/Login/Login";
 
 export const Home = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const userId = localStorage.getItem("userId"); // Make sure this matches what you store in localStorage
+    if (userId) {
+      navigate("/accueil"); // Redirect logged-in users to /accueil
+    }
+  }, [navigate]); // Fix the missing dependency bracket
+
   const [showLogin, setShowLogin] = useState(false);
 
   const handleCloseLogin = (e) => {

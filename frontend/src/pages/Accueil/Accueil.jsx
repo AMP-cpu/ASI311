@@ -50,6 +50,15 @@ export const Accueil = () => {
     movie.titre.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Merge movie data with OMDb data
+  const handleMovieClick = (movie) => {
+    const movieDetails = omdbData[movie.titre] || {};
+    setSelectedMovie({
+      ...movie,
+      ...movieDetails, // Merge movie data with OMDb data
+    });
+  };
+
   return (
     <div className="accueil">
       <h1>Welcome to the Movie Gallery</h1>
@@ -73,7 +82,7 @@ export const Accueil = () => {
               <div
                 key={movie.id}
                 className="movie-card"
-                onClick={() => setSelectedMovie(omdbData[movie.titre])}
+                onClick={() => handleMovieClick(movie)}
               >
                 {omdbData[movie.titre] && omdbData[movie.titre].Poster ? (
                   <img
@@ -87,7 +96,8 @@ export const Accueil = () => {
                 <div className="movie-info">
                   <p className="movie-title">{movie.titre}</p>
                   <p className="movie-director">
-                    {movie.realisateur.prenom} {movie.realisateur.nom} {movie.realisateur.celebre ? "🏆" : ""}
+                    {movie.realisateur.prenom} {movie.realisateur.nom}{" "}
+                    {movie.realisateur.celebre ? "🏆" : ""}
                   </p>
                 </div>
               </div>
@@ -99,7 +109,10 @@ export const Accueil = () => {
       </div>
 
       {/* Render the MovieModal */}
-      <MovieModal selectedMovie={selectedMovie} closeModal={() => setSelectedMovie(null)} />
+      <MovieModal
+        selectedMovie={selectedMovie}
+        closeModal={() => setSelectedMovie(null)}
+      />
     </div>
   );
 };

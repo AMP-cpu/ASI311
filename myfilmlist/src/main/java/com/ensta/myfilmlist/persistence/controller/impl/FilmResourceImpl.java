@@ -194,7 +194,6 @@ public class FilmResourceImpl implements FilmResource {
     public ResponseEntity<Double> findFilmAverageNote(long filmId) throws ControllerException {
         try {
             Double averageNote = myFilmsService.findFilmAverageNote(filmId);
-            System.out.println("IN API = "+ averageNote);
             return ResponseEntity.ok(averageNote);
         } catch (Exception e) {
             throw new ControllerException("Error retrieving film average note.", e);

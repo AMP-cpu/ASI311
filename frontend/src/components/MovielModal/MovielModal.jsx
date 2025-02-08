@@ -11,6 +11,7 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
 
   useEffect(() => {
     if (selectedMovie && userId) {
+      setPersonalRating(null);
       fetchFavoriteStatus();
       fetchAverageRating();
       fetchPersonalRating();

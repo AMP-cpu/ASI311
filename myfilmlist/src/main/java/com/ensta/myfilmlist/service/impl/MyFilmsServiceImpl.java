@@ -257,7 +257,7 @@ public class MyFilmsServiceImpl implements MyFilmsService {
     public Double findFilmAverageNote(long filmId) throws ServiceException {
         try {
             Optional<Double> optionalAvgNote = utilisateurFilmDAO.findFilmAverageNote(filmId);
-
+            
             return optionalAvgNote.orElse(null);
         } catch (Exception e) {
             throw new ServiceException("Erreur lors de la récupération de la moyenne de la note", e);

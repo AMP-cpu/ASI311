@@ -167,21 +167,19 @@ public class FilmResourceImpl implements FilmResource {
         }
     }
 
-    @ApiOperation(value = "Verifie si un film is a favorite d'un utilisateur par filmId et userId")
+    @ApiOperation(value = "Vérifie si un film est un favori d'un utilisateur par filmId et userId")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Film is or isn't a favorite!"),
+            @ApiResponse(code = 200, message = "Renvoie true si le film est favori, sinon false"),
+            @ApiResponse(code = 500, message = "Erreur lors de la vérification du statut favori")
     })
     @Override
-    public ResponseEntity<String> isFilmAFavorite(long filmID, long userId) throws ControllerException {
+    public ResponseEntity<Boolean> isFilmAFavorite(long filmID, long userId) throws ControllerException {
         try {
             List<FilmDTO> films = myFilmsService.findUserFavoriteFilms(userId);
             
-            for (FilmDTO filmDTO : films) {
-                if(filmDTO.getId() == filmID){
-                    return ResponseEntity.ok( "A favorite");
-                }
-            }
-            return ResponseEntity.ok("Not a fovorite");
+            boolean isFavorite = films.stream().anyMatch(film -> film.getId() == filmID);
+            return ResponseEntity.ok(isFavorite);
+    
         } catch (Exception e) {
             throw new ControllerException("Error in searching for favorite user films.", e);
         }
@@ -196,6 +194,7 @@ public class FilmResourceImpl implements FilmResource {
     public ResponseEntity<Double> findFilmAverageNote(long filmId) throws ControllerException {
         try {
             Double averageNote = myFilmsService.findFilmAverageNote(filmId);
+            System.out.println("IN API = "+ averageNote);
             return ResponseEntity.ok(averageNote);
         } catch (Exception e) {
             throw new ControllerException("Error retrieving film average note.", e);

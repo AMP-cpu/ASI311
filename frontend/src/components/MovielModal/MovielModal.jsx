@@ -37,7 +37,7 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
         return;
       }
       const data = await response.json();
-      setAverageRating(data.average || "N/A");
+      setAverageRating(data);
     } catch (error) {
       console.error("Error fetching average rating:", error);
     }
@@ -46,12 +46,15 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
   const fetchPersonalRating = async () => {
     try {
       const response = await fetch(`http://localhost:8080/film/note/personal/${selectedMovie.id}/${userId}`);
+      console.log(selectedMovie.id);
+      console.log(userId);
       if (!response.ok) {
         console.error("Failed to fetch personal rating:", response.statusText);
         return;
       }
       const data = await response.json();
-      setPersonalRating(data.rating || "Not rated");
+      console.log(data)
+      setPersonalRating(data);
     } catch (error) {
       console.error("Error fetching personal rating:", error);
     }
@@ -109,7 +112,7 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
         <div className="modal-body">
           <img src={selectedMovie.Poster} alt={selectedMovie.Title} className="modal-poster" />
           <div className="synopsis">
-            <p>{selectedMovie.Plot === "N/A" ? "No description available" : selectedMovie.Plot}</p>
+            <p>{selectedMovie.Plot === "N/A" ? "" : selectedMovie.Plot}</p>
 
             <div className="genres">
               {selectedMovie.Genre && selectedMovie.Genre.split(',').map((genre, index) => (
@@ -130,7 +133,7 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
                   max="20"
                   value={newRating}
                   onChange={(e) => setNewRating(e.target.value)}
-                  placeholder="0-20"
+                  placeholder={personalRating}
                 />
                 <button onClick={handleRatingSubmit}>Submit Rating</button>
               </div>

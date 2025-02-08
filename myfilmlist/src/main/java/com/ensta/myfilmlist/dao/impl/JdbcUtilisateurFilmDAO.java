@@ -60,12 +60,12 @@ public class JdbcUtilisateurFilmDAO implements UtilisateurFilmDAO {
         String sql = "SELECT AVG(CAST(uf.note AS DOUBLE PRECISION)) as average_rating " +
                 "FROM UtilisateurFilm uf " +
                 "WHERE uf.film_id = ? AND uf.note IS NOT NULL";
-
-        Double average = jdbcTemplate.queryForObject(
-                sql,
-                new Object[]{filmId},
-                (rs, rowNum) -> rs.getObject("average_rating", Double.class)
-        );
+                    
+                Double average = jdbcTemplate.queryForObject(
+                    sql,
+                    new Object[]{filmId},
+                    (rs, rowNum) -> rs.getObject("average_rating", Double.class)
+                    );
 
         return Optional.ofNullable(average);
     }

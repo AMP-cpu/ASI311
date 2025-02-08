@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./MovieModal.css";
 
 export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
@@ -16,10 +17,11 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
     }
   }, [selectedMovie, userId]);
 
+  // Fetch favorite status using axios
   const fetchFavoriteStatus = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/film/favorite/${selectedMovie.id}/${userId}`);
-      if (response.ok) {
+      const response = await axios.get(`http://localhost:8080/film/favorite/${selectedMovie.id}/${userId}`);
+      if (response.status === 200) {
         setIsFavorite(true);
       } else {
         console.log("Failed to fetch favorite status:", response.statusText);
@@ -29,45 +31,46 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
     }
   };
 
+  // Fetch average rating using axios
   const fetchAverageRating = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/film/note/average/${selectedMovie.id}`);
-      if (!response.ok) {
+      const response = await axios.get(`http://localhost:8080/film/note/average/${selectedMovie.id}`);
+      if (response.status === 200) {
+        setAverageRating(response.data);
+      } else {
         console.error("Failed to fetch average rating:", response.statusText);
-        return;
       }
-      const data = await response.json();
-      setAverageRating(data);
     } catch (error) {
       console.error("Error fetching average rating:", error);
     }
   };
 
+  // Fetch personal rating using axios
   const fetchPersonalRating = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/film/note/personal/${selectedMovie.id}/${userId}`);
-      console.log(selectedMovie.id);
-      console.log(userId);
-      if (!response.ok) {
+      const response = await axios.get(`http://localhost:8080/film/note/personal/${selectedMovie.id}/${userId}`);
+      console.log(`http://localhost:8080/film/note/personal/${selectedMovie.id}/${userId}`)
+      if (response.status === 200 && response.data) {
+        setPersonalRating(response.data);
+      } else {
         console.error("Failed to fetch personal rating:", response.statusText);
-        return;
       }
-      const data = await response.json();
-      console.log(data)
-      setPersonalRating(data);
     } catch (error) {
       console.error("Error fetching personal rating:", error);
     }
   };
 
+  // Handle favorite toggle using axios
   const handleFavoriteToggle = async () => {
     try {
       const method = isFavorite ? "DELETE" : "POST";
-      const response = await fetch(`http://localhost:8080/film/favorite/${selectedMovie.id}/${userId}`, {
+      const response = await axios({
         method,
+        url: `http://localhost:8080/film/favorite/${selectedMovie.id}/${userId}`,
       });
-      if (response.ok) setIsFavorite(!isFavorite);
-      else {
+      if (response.status === 200) {
+        setIsFavorite(!isFavorite);
+      } else {
         console.log("Failed to update favorite status:", response.statusText);
       }
     } catch (error) {
@@ -75,15 +78,13 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
     }
   };
 
-  // ✅ Handle rating submission from input
+  // Handle rating submission from input
   const handleRatingSubmit = async () => {
     const ratingValue = parseInt(newRating, 10);
     if (ratingValue >= 0 && ratingValue <= 20) {
       try {
-        const response = await fetch(`http://localhost:8080/film/note/eval/${selectedMovie.id}/${userId}/${ratingValue}`, {
-          method: "POST",
-        });
-        if (response.ok) {
+        const response = await axios.post(`http://localhost:8080/film/note/eval/${userId}/${selectedMovie.id}/${ratingValue}`);
+        if (response.status === 200) {
           setPersonalRating(ratingValue);
           fetchAverageRating();
         } else {

@@ -37,6 +37,9 @@ public interface FilmResource {
     @PostMapping("/favorite/{filmId}/{userId}")
     ResponseEntity<String> addFilmToFavorite(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) throws ControllerException;
 
+    @GetMapping("/favorite/{filmId}/{userId}")
+    ResponseEntity<String> isFilmAFavorite(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) throws ControllerException;
+
     @DeleteMapping("/favorite/{filmId}/{userId}")
     ResponseEntity<String> removeFilmToFavorite(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId) throws ControllerException;
 
@@ -48,6 +51,7 @@ public interface FilmResource {
 
     @PostMapping("/note/eval/{filmId}/{userId}/{note}")
     ResponseEntity<String> evalFilm(@PathVariable("filmId") long filmId, @PathVariable("userId") long userId, @PathVariable("note") int note) throws ControllerException;
+
 
 
 }

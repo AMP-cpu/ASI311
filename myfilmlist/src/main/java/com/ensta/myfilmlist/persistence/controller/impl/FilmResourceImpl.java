@@ -143,6 +143,7 @@ public class FilmResourceImpl implements FilmResource {
             throw new ControllerException("Error in searching for favorite user films.", e);
         }
     }
+
     
     @ApiOperation(value = "Supprime un film de la liste de favorits par filmId et userId")
     @ApiResponses(value = {
@@ -163,6 +164,26 @@ public class FilmResourceImpl implements FilmResource {
             return ResponseEntity.ok("Film removed from favorits!");
         } catch (Exception e) {
             throw new ControllerException("Error in removing film from favorites.", e);
+        }
+    }
+
+    @ApiOperation(value = "Verifie si un film is a favorite d'un utilisateur par filmId et userId")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Film is or isn't a favorite!"),
+    })
+    @Override
+    public ResponseEntity<String> isFilmAFavorite(long filmID, long userId) throws ControllerException {
+        try {
+            List<FilmDTO> films = myFilmsService.findUserFavoriteFilms(userId);
+            
+            for (FilmDTO filmDTO : films) {
+                if(filmDTO.getId() == filmID){
+                    return ResponseEntity.ok( "A favorite");
+                }
+            }
+            return ResponseEntity.ok("Not a fovorite");
+        } catch (Exception e) {
+            throw new ControllerException("Error in searching for favorite user films.", e);
         }
     }
 
@@ -211,6 +232,7 @@ public class FilmResourceImpl implements FilmResource {
             throw new ControllerException("Error evaluating film.", e);
         }
     }
+
 
 
 

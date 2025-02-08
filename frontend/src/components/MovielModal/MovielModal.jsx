@@ -1,91 +1,96 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "./MovieModal.css";
 
 export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
-  const userId = localStorage.getItem('userId');
+  const userId = localStorage.getItem("userId");
   const [isFavorite, setIsFavorite] = useState(false);
   const [averageRating, setAverageRating] = useState(null);
   const [personalRating, setPersonalRating] = useState(null);
-  const [newRating, setNewRating] = useState(""); // State for the input rating
+  const [newRating, setNewRating] = useState("");
 
+  // ✅ Resetar o estado sempre que selectedMovie mudar
   useEffect(() => {
-    if (selectedMovie && userId) {
-      setPersonalRating(null);
+    if (selectedMovie?.id && userId) {
+      setIsFavorite(false); // Reset favorito
+      setAverageRating(null); // Reset média de notas
+      setPersonalRating(null); // Reset nota pessoal
+      setNewRating(""); // Reset input de nota
+
       fetchFavoriteStatus();
       fetchAverageRating();
       fetchPersonalRating();
     }
-  }, [selectedMovie, userId]);
+  }, [selectedMovie?.id, userId]);
 
-  // Fetch favorite status using axios
   const fetchFavoriteStatus = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/film/favorite/${selectedMovie.id}/${userId}`);
-      if (response.status === 200) {
-        setIsFavorite(true);
-      } else {
-        console.log("Failed to fetch favorite status:", response.statusText);
+      const response = await fetch(`http://localhost:8080/film/favorite/${selectedMovie.id}/${userId}`);
+      if (!response.ok) {
+        console.error("Failed to fetch favorite status:", response.statusText);
+        return;
       }
+      const isFav = await response.json();
+      setIsFavorite(isFav);
     } catch (error) {
       console.error("Error fetching favorite status:", error);
     }
   };
 
-  // Fetch average rating using axios
   const fetchAverageRating = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/film/note/average/${selectedMovie.id}`);
-      if (response.status === 200) {
-        setAverageRating(response.data);
-      } else {
+      const response = await fetch(`http://localhost:8080/film/note/average/${selectedMovie.id}`);
+      if (!response.ok) {
         console.error("Failed to fetch average rating:", response.statusText);
+        return;
       }
+      const data = await response.json();
+      setAverageRating(data);
     } catch (error) {
       console.error("Error fetching average rating:", error);
     }
   };
 
-  // Fetch personal rating using axios
   const fetchPersonalRating = async () => {
     try {
-      const response = await axios.get(`http://localhost:8080/film/note/personal/${selectedMovie.id}/${userId}`);
-      console.log(`http://localhost:8080/film/note/personal/${selectedMovie.id}/${userId}`)
-      if (response.status === 200 && response.data) {
-        setPersonalRating(response.data);
-      } else {
+      const response = await fetch(`http://localhost:8080/film/note/personal/${selectedMovie.id}/${userId}`);
+      if (!response.ok) {
         console.error("Failed to fetch personal rating:", response.statusText);
+        return;
       }
+      const data = await response.json();
+      setPersonalRating(data);
     } catch (error) {
       console.error("Error fetching personal rating:", error);
     }
   };
 
-  // Handle favorite toggle using axios
   const handleFavoriteToggle = async () => {
     try {
       const method = isFavorite ? "DELETE" : "POST";
-      const response = await axios({
+      const response = await fetch(`http://localhost:8080/film/favorite/${selectedMovie.id}/${userId}`, {
         method,
-        url: `http://localhost:8080/film/favorite/${selectedMovie.id}/${userId}`,
       });
-      if (response.status === 200) {
+      if (response.ok) {
         setIsFavorite(!isFavorite);
       } else {
-        console.log("Failed to update favorite status:", response.statusText);
+        console.error("Failed to update favorite status:", response.statusText);
       }
     } catch (error) {
       console.error("Error updating favorite status:", error);
     }
   };
 
-  // Handle rating submission from input
   const handleRatingSubmit = async () => {
     const ratingValue = parseInt(newRating, 10);
     if (ratingValue >= 0 && ratingValue <= 20) {
       try {
-        const response = await axios.post(`http://localhost:8080/film/note/eval/${userId}/${selectedMovie.id}/${ratingValue}`);
-        if (response.status === 200) {
+        const response = await fetch(
+          `http://localhost:8080/film/note/eval/${selectedMovie.id}/${userId}/${ratingValue}`,
+          {
+            method: "POST",
+          }
+        );
+        if (response.ok) {
           setPersonalRating(ratingValue);
           fetchAverageRating();
         } else {
@@ -107,7 +112,9 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
         <span className="close-btn" onClick={closeModal}>&times;</span>
 
         <div className="modal-info">
-          <h2>{selectedMovie.Title} ({selectedMovie.Year})</h2>
+          <h2>
+            {selectedMovie.Title} ({selectedMovie.Year})
+          </h2>
           <p>{selectedMovie.Director}</p>
         </div>
 
@@ -117,16 +124,18 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
             <p>{selectedMovie.Plot === "N/A" ? "" : selectedMovie.Plot}</p>
 
             <div className="genres">
-              {selectedMovie.Genre && selectedMovie.Genre.split(',').map((genre, index) => (
-                <span key={index} className="genre">{genre.trim()}</span>
-              ))}
+              {selectedMovie.Genre &&
+                selectedMovie.Genre.split(",").map((genre, index) => (
+                  <span key={index} className="genre">
+                    {genre.trim()}
+                  </span>
+                ))}
             </div>
 
             <div className="ratings">
-              <p>⭐ Average Rating: {averageRating ? averageRating : 0}</p>
-              <p>⭐ Your Rating: {personalRating}</p>
-              
-              {/* Rating Input */}
+              <p>⭐ Average Rating: {averageRating !== null ? averageRating : "No ratings yet"}</p>
+              <p>⭐ Your Rating: {personalRating !== null ? personalRating : "You haven't rated this movie yet"}</p>
+
               <div className="rating-input">
                 <label>Enter your rating (0-20):</label>
                 <input
@@ -135,7 +144,7 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
                   max="20"
                   value={newRating}
                   onChange={(e) => setNewRating(e.target.value)}
-                  placeholder={personalRating}
+                  placeholder={personalRating !== null ? personalRating : ""}
                 />
                 <button onClick={handleRatingSubmit}>Submit Rating</button>
               </div>

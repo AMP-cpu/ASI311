@@ -1,4 +1,4 @@
-package com.ensta.myfilmlist.persistence.controller.impl;
+package com.ensta.myfilmlist.controller.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ensta.myfilmlist.controller.RealisateurResource;
 import com.ensta.myfilmlist.dto.RealisateurDTO;
 import com.ensta.myfilmlist.exception.ControllerException;
 import com.ensta.myfilmlist.form.RealisateurForm;
-import com.ensta.myfilmlist.persistence.controller.RealisateurResource;
 import com.ensta.myfilmlist.service.MyFilmsService;
 
 import io.swagger.annotations.*;

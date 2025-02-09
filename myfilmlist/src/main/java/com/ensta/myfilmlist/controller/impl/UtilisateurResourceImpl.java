@@ -1,4 +1,4 @@
-package com.ensta.myfilmlist.persistence.controller.impl;
+package com.ensta.myfilmlist.controller.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ensta.myfilmlist.controller.UtilisateurResource;
 import com.ensta.myfilmlist.dto.FilmDTO;
 import com.ensta.myfilmlist.exception.ControllerException;
 import com.ensta.myfilmlist.form.FilmForm;
 import com.ensta.myfilmlist.model.Utilisateur;
-import com.ensta.myfilmlist.persistence.controller.UtilisateurResource;
 import com.ensta.myfilmlist.service.MyFilmsService;
 
 import io.swagger.annotations.*;

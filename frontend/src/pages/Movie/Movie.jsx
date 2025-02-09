@@ -21,6 +21,7 @@ export const Movie = () => {
       });
   }, [movieId]);
 
+
   const fetchMovieDetails = async (movieTitle) => {
     try {
       const response = await axios.get(

@@ -7,8 +7,9 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("userId"); 
-    navigate("/"); 
+    localStorage.removeItem("userId");
+    localStorage.removeItem("is_admin");
+    navigate("/");
   };
 
   return (

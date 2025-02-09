@@ -4,11 +4,12 @@ import "./Accueil.css";
 import { MovieModal } from "../../components/MovielModal/MovielModal";
 
 const API_KEY = "17eb4502"; // OMDb API key
-const userId = localStorage.getItem("userId");
-const admin = localStorage.getItem("is_admin");
-console.log(admin);
 
 export const Accueil = () => {
+  const [userId, setUserId] = useState(localStorage.getItem("userId"));
+  const [isAdmin, setIsAdmin] = useState(
+    localStorage.getItem("is_admin") === "true"
+  );
   const [movies, setMovies] = useState([]);
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [omdbData, setOmdbData] = useState({});
@@ -40,7 +41,6 @@ export const Accueil = () => {
     axios.get("http://localhost:8080/realisateur").then((response) => {
       setDirectors(response.data);
     });
-
     axios
       .get(`http://localhost:8080/film/favorite/${userId}`)
       .then((response) => {
@@ -203,7 +203,7 @@ export const Accueil = () => {
         closeModal={() => setSelectedMovie(null)}
       />
 
-      {localStorage.getItem("is_admin") == "true" && (
+      {isAdmin && (
         <>
           {!isFormVisible && (
             <div className="centered-button">

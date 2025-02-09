@@ -67,10 +67,10 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin, favoriteMovies,
   const handleFavoriteToggle = async () => {
     const isCurrentlyFavorite = favoriteMovies.some((movie) => movie.id === selectedMovie.id);
     const newFavoriteList = isCurrentlyFavorite
-      ? favoriteMovies.filter((movie) => movie.id !== selectedMovie.id) // Remove from favorites
-      : [...favoriteMovies, selectedMovie]; // Add to favorites
+      ? favoriteMovies.filter((movie) => movie.id !== selectedMovie.id)  
+      : [...favoriteMovies, selectedMovie];  
   
-    setFavoriteMovies(newFavoriteList); // Update UI instantly
+    setFavoriteMovies(newFavoriteList);  
   
     try {
       const method = isCurrentlyFavorite ? "DELETE" : "POST";
@@ -84,7 +84,7 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin, favoriteMovies,
       }
     } catch (error) {
       console.error("Error updating favorite status:", error);
-      setFavoriteMovies(favoriteMovies); // Revert if API call fails
+      setFavoriteMovies(favoriteMovies);  
     }
   };
 

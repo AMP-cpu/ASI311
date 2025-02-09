@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; 
 import "./Login.css";
 
 export const Login = ({ onClose }) => {
@@ -11,7 +11,7 @@ export const Login = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); 
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -33,14 +33,12 @@ export const Login = ({ onClose }) => {
         body: payload,
       });
 
-      // Check if the response is not JSON
       const contentType = response.headers.get("Content-Type");
       let data = {};
 
       if (contentType && contentType.includes("application/json")) {
         data = await response.json();
       } else {
-        // Handle non-JSON response (e.g., HTML, plain text)
         const text = await response.text();
         setErrorMessage(text || "An error occurred");
         return;

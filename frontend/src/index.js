@@ -9,9 +9,8 @@ import { Navbar } from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import { NotFound } from './pages/NotFound/NotFound';
 
-// Helper function to check if the user is logged in
 const isLoggedIn = () => {
-  return localStorage.getItem('userId'); // Check login status from localStorage
+  return localStorage.getItem('userId'); 
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -22,8 +21,6 @@ root.render(
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-
-        {/* Protecting routes with login check */}
         <Route
           path="/accueil"
           element={isLoggedIn ? <Accueil /> : <Navigate to="/" />}
@@ -32,7 +29,6 @@ root.render(
           path="/movie/:movieId"
           element={isLoggedIn ? <Movie /> : <Navigate to="/" />}
         />
-
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

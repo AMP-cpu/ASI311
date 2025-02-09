@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/realisateur")
+@CrossOrigin(origins = "http://localhost:3000") // Allow requests from your React app
 public class RealisateurResourceImpl implements RealisateurResource {
 
     @Autowired

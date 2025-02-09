@@ -127,6 +127,7 @@ export const MovieModal = ({
   };
 
   if (!selectedMovie || !userId) return null;
+  console.log(selectedMovie)
 
   return (
     <div className="modal-overlay" onClick={closeModal}>
@@ -143,7 +144,7 @@ export const MovieModal = ({
           <h2>
             {selectedMovie.Title} ({selectedMovie.Year})
           </h2>
-          <p>{selectedMovie.Director}</p>
+          <p>{selectedMovie.realisateur.prenom} {selectedMovie.realisateur.nom} {selectedMovie.realisateur.celebre ? "🏆" : ""}</p>
         </div>
 
         <div className="modal-body">

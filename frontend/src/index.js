@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import './index.css';
 import { Home } from './pages/Home/Home';
 import { Accueil } from './pages/Accueil/Accueil';
-import { Movie } from './pages/Movie/Movie';
 import { Navbar } from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import { NotFound } from './pages/NotFound/NotFound';
@@ -24,10 +23,6 @@ root.render(
         <Route
           path="/accueil"
           element={isLoggedIn ? <Accueil /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/movie/:movieId"
-          element={isLoggedIn ? <Movie /> : <Navigate to="/" />}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>

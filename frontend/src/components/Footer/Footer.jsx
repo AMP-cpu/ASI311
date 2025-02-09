@@ -7,9 +7,14 @@ const Footer = () => {
       <div className="footer-container">
         <div className="footer-section">
           <h4>About Us</h4>
-          <p>
-            bla bla bla
-          </p>
+          <ul class="about-us-list">
+            <li>Augusto Miranda</li>
+            <li>Gustavo Jodar</li>
+            <li>Leonardo Picoli</li>
+            <li>Dora</li>
+            <li>Salima Azouz</li>
+            <li></li>
+          </ul>
         </div>
         <div className="footer-section">
           <h4>Quick Links</h4>
@@ -31,7 +36,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>© 2024 Your Company. All Rights Reserved.</p>
+        <p>© 2024 Forest Gump. All Rights Reserved.</p>
       </div>
     </footer>
   );

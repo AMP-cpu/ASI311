@@ -71,4 +71,11 @@
     font-size: 13px;
     color: #aaa;
   }
+  .about-us-list {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none; /* Removes the default list bullets */
+    padding: 0; /* Removes any padding */
+  }
+  
   

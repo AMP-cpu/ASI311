@@ -4,11 +4,12 @@ import "./Accueil.css";
 import { MovieModal } from "../../components/MovielModal/MovielModal";
 
 const API_KEY = "17eb4502"; // OMDb API key
-const userId = localStorage.getItem("userId");
-const admin = localStorage.getItem("is_admin");
-console.log(admin);
 
 export const Accueil = () => {
+  const [userId, ] = useState(localStorage.getItem("userId"));
+  const [isAdmin, ] = useState(
+    localStorage.getItem("is_admin") === "true"
+  );
   const [movies, setMovies] = useState([]);
   const [favoriteMovies, setFavoriteMovies] = useState([]);
   const [omdbData, setOmdbData] = useState({});
@@ -40,7 +41,6 @@ export const Accueil = () => {
     axios.get("http://localhost:8080/realisateur").then((response) => {
       setDirectors(response.data);
     });
-
     axios
       .get(`http://localhost:8080/film/favorite/${userId}`)
       .then((response) => {
@@ -129,19 +129,24 @@ export const Accueil = () => {
   };
 
   return (
-    <div className="accueil">
-      <h1>Welcome to the Movie Gallery</h1>
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search for a movie..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-bar"
-        />
+    <div className="accueil" >
+      <div className="welcome-banner">
+        <h1>Welcome to the Movie Gallery</h1>
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Search for a movie..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-bar"
+          />
+        </div>
       </div>
+      
+      
+      
 
-      <h2>Movies</h2>
+      {/* <h2>Movies</h2> */}
       <div className="movie-carousel">
         {filteredMovies.length > 0 ? (
           filteredMovies.map((movie) => (
@@ -168,7 +173,10 @@ export const Accueil = () => {
       </div>
       {favoriteMovies.length > 0 && (
         <>
-          <h2>Favorite Movies</h2>
+          <div  className="favorites-container">
+            <h2>Favorite Movies</h2>
+          </div>
+          
           <div className="movie-carousel">
             {favoriteMovies.length > 0 ? (
               favoriteMovies.map((movie) => (
@@ -203,7 +211,7 @@ export const Accueil = () => {
         closeModal={() => setSelectedMovie(null)}
       />
 
-      {localStorage.getItem("is_admin") == "true" && (
+      {isAdmin && (
         <>
           {!isFormVisible && (
             <div className="centered-button">

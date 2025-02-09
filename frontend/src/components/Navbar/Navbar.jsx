@@ -7,14 +7,15 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("userId"); 
-    navigate("/"); 
+    localStorage.removeItem("userId");
+    localStorage.removeItem("is_admin");
+    navigate("/");
   };
 
   return (
     <div>
       <div id="main-navbar" className="navbar">
-        <a href="/" className="logo"></a>
+        <a href="/" className="logo" aria-label="Go to homepage"></a>
         <nav>
           <ul>
             <li
@@ -22,7 +23,7 @@ export const Navbar = () => {
               onMouseEnter={() => setShowDropdown(true)}
               onMouseLeave={() => setShowDropdown(false)}
             >
-              <a href="#">User</a>
+              <button style={{border:"none", background: 'transparent', color: "white", fontSize: 16}}aria-label="User options">User</button>
               {showDropdown && (
                 <div className="dropdown">
                   <button onClick={handleLogout}>Disconnect</button>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Accueil.css";
-import { MovieModal } from "../../components/MovielModal/MovielModal"; // Corrected import
+import { MovieModal } from "../../components/MovielModal/MovielModal";
 
 const API_KEY = "17eb4502"; // OMDb API key
 const userId = localStorage.getItem("userId");
@@ -25,8 +25,8 @@ export const Accueil = () => {
     nom: "",
     dateNaissance: "",
   });
-  const [isFormVisible, setIsFormVisible] = useState(false); // State for movie form visibility
-  const [isDirectorFormVisible, setIsDirectorFormVisible] = useState(false); // State for director form visibility
+  const [isFormVisible, setIsFormVisible] = useState(false);
+  const [isDirectorFormVisible, setIsDirectorFormVisible] = useState(false);
 
   useEffect(() => {
     axios
@@ -84,20 +84,18 @@ export const Accueil = () => {
     e.preventDefault();
 
     try {
-      // Sending the new movie data to the server in the required format
       const response = await axios.post("http://localhost:8080/film", newMovie);
       const addedMovie = response.data;
 
-      // Fetch the new movie's details from OMDb and add it to the state
       fetchMovieDetails(addedMovie.titre);
 
-      setMovies([...movies, addedMovie]); // Add the new movie to the list
+      setMovies([...movies, addedMovie]);
       setNewMovie({
         titre: "",
         duree: 0,
         realisateurId: 0,
-      }); // Reset the form fields
-      setIsFormVisible(false); // Hide the form after submission
+      });
+      setIsFormVisible(false);
     } catch (error) {
       console.error("Error adding new movie:", error);
     }
@@ -195,6 +193,8 @@ export const Accueil = () => {
 
       <MovieModal
         selectedMovie={selectedMovie}
+        favoriteMovies={favoriteMovies}
+        setFavoriteMovies={setFavoriteMovies}
         closeModal={() => setSelectedMovie(null)}
       />
 

@@ -10,7 +10,6 @@ export const Movie = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch movie details from your database
     axios
       .get(`http://localhost:8080/film/${movieId}`)
       .then((response) => {
@@ -22,7 +21,6 @@ export const Movie = () => {
       });
   }, [movieId]);
 
-  // Fetch additional movie details from OMDb API
   const fetchMovieDetails = async (movieTitle) => {
     try {
       const response = await axios.get(

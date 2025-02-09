@@ -116,7 +116,7 @@
 
 .movie-carousel-container:hover .arrow-left,
 .movie-carousel-container:hover .arrow-right {
-  opacity: 1; /* Arrows appear when hovering over the carousel */
+  opacity: 1; 
 }
 
 .arrow-left:hover,

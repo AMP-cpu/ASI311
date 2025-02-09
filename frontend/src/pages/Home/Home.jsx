@@ -6,11 +6,11 @@ import { Login } from "../../components/Login/Login";
 export const Home = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    const userId = localStorage.getItem("userId"); // Make sure this matches what you store in localStorage
+    const userId = localStorage.getItem("userId");
     if (userId) {
-      navigate("/accueil"); // Redirect logged-in users to /accueil
+      navigate("/accueil"); 
     }
-  }, [navigate]); // Fix the missing dependency bracket
+  }, [navigate]); 
 
   const [showLogin, setShowLogin] = useState(false);
 

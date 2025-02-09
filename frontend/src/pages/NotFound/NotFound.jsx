@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // You can use this for navigation
+import { Link } from 'react-router-dom'; 
 import "./NotFound.css";
 
 export const NotFound = () => {

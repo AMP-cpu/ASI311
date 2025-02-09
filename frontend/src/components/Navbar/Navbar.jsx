@@ -7,8 +7,8 @@ export const Navbar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("userId"); // Clear user session
-    navigate("/"); // Redirect to home after logout
+    localStorage.removeItem("userId"); 
+    navigate("/"); 
   };
 
   return (
@@ -17,9 +17,6 @@ export const Navbar = () => {
         <a href="/" className="logo"></a>
         <nav>
           <ul>
-            {/* <li>
-              <a href="/a">Home</a>
-            </li> */}
             <li
               className="user-tab"
               onMouseEnter={() => setShowDropdown(true)}

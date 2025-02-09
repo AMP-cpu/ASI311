@@ -35,8 +35,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Adjust opacity for darkness */
-    z-index: 0; /* Keep it behind content */
+    background: rgba(0, 0, 0, 0.5); 
+    z-index: 0; 
   }
   
   .modal-info {
@@ -55,28 +55,25 @@
     font-size: 18px;
   }
   
-  /* Ensure poster and synopsis are the same height */
   .modal-body {
     display: flex;
-    flex-direction: row; /* Horizontal alignment */
-    align-items: stretch; /* Ensure equal height */
+    flex-direction: row; 
+    align-items: stretch; 
     justify-content: center;
-    gap: 20px; /* Space between poster and text */
+    gap: 20px; 
     width: 100%;
     text-align: left;
     margin-top: 15px;
     z-index: 1;
   }
   
-  /* Movie poster styling */
   .modal-poster {
     width: 300px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    object-fit: cover; /* Ensures image fills its container */
+    object-fit: cover; 
   }
   
-  /* Ensure synopsis stretches to full height */
   .synopsis {
     flex: 1;
     font-size: 16px;
@@ -97,7 +94,7 @@
     justify-content: center;
     gap: 15px;
     position: absolute;
-    bottom: 10px; /* Positioned at the bottom */
+    bottom: 10px; 
     width: 100%;
     z-index: 2;
   }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./MovieModal.css";
 
-export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
+export const MovieModal = ({ selectedMovie, closeModal, isAdmin, favoriteMovies, setFavoriteMovies  }) => {
   const userId = localStorage.getItem("userId");
   const [isFavorite, setIsFavorite] = useState(false);
   const [averageRating, setAverageRating] = useState(null);
@@ -65,18 +65,26 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin }) => {
   };
 
   const handleFavoriteToggle = async () => {
+    const isCurrentlyFavorite = favoriteMovies.some((movie) => movie.id === selectedMovie.id);
+    const newFavoriteList = isCurrentlyFavorite
+      ? favoriteMovies.filter((movie) => movie.id !== selectedMovie.id) // Remove from favorites
+      : [...favoriteMovies, selectedMovie]; // Add to favorites
+  
+    setFavoriteMovies(newFavoriteList); // Update UI instantly
+  
     try {
-      const method = isFavorite ? "DELETE" : "POST";
-      const response = await fetch(`http://localhost:8080/film/favorite/${selectedMovie.id}/${userId}`, {
-        method,
-      });
-      if (response.ok) {
-        setIsFavorite(!isFavorite);
-      } else {
-        console.error("Failed to update favorite status:", response.statusText);
+      const method = isCurrentlyFavorite ? "DELETE" : "POST";
+      const response = await fetch(
+        `http://localhost:8080/film/favorite/${selectedMovie.id}/${userId}`,
+        { method }
+      );
+  
+      if (!response.ok) {
+        throw new Error("Failed to update favorite status");
       }
     } catch (error) {
       console.error("Error updating favorite status:", error);
+      setFavoriteMovies(favoriteMovies); // Revert if API call fails
     }
   };
 

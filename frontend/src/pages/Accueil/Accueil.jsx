@@ -99,7 +99,7 @@ export const Accueil = () => {
     }
   };
 
-  // Handle new director form submission
+
 const handleNewDirectorSubmit = async (e) => {
   e.preventDefault();
 
@@ -200,7 +200,7 @@ const handleNewDirectorSubmit = async (e) => {
       )}
       
 
-      <MovieModal selectedMovie={selectedMovie} closeModal={() => setSelectedMovie(null)} />
+      <MovieModal selectedMovie={selectedMovie} favoriteMovies={favoriteMovies} setFavoriteMovies={setFavoriteMovies} closeModal={() => setSelectedMovie(null)} />
 
       {localStorage.getItem('is_admin')=="true" && (
       <>

@@ -107,7 +107,12 @@ export const Accueil = () => {
 
     try {
       // Sending the new director data to the server in the required format
-      await axios.post("http://localhost:8080/realisateur", newDirector);
+      const response = await axios.post(
+        "http://localhost:8080/realisateur",
+        newDirector
+      );
+      const addedDirector = response.data;
+      setDirectors([...directors, addedDirector]);
 
       // Reset the form fields
       setNewDirector({

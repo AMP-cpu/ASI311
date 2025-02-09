@@ -62,5 +62,4 @@ public class MyfilmlistMain {
 		myFilmListTests.loginTest();
 		myFilmListTests.signupTest();
 	}
-
 }

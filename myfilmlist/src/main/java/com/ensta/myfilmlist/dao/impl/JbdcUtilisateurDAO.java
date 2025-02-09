@@ -4,7 +4,6 @@ import com.ensta.myfilmlist.dao.UtilisateurDAO;
 import com.ensta.myfilmlist.model.Utilisateur;
 import com.ensta.myfilmlist.persistence.ConnectionManager;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -25,19 +24,23 @@ public class JbdcUtilisateurDAO implements UtilisateurDAO {
     // Injecter le PasswordEncoder via le constructeur
     public JbdcUtilisateurDAO() {}
 
-    @Override
     public Optional<Utilisateur> findByEmail(String email) {
         String sql = "SELECT * FROM utilisateur WHERE utilisateur.email = ?";
 
         try {
-            Utilisateur utilisateur = jdbcTemplate.queryForObject(
-                    sql,
-                    new BeanPropertyRowMapper<>(Utilisateur.class),
-                    email
-            );
+            Utilisateur utilisateur = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
+                Utilisateur user = new Utilisateur();
+                user.setId(rs.getLong("id"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setPrenom(rs.getString("prenom"));
+                user.setNom(rs.getString("nom"));
+                user.setAdmin(rs.getBoolean("is_admin")); // Ensure proper mapping
+                return user;
+            }, email);
+
             return Optional.ofNullable(utilisateur);
         } catch (EmptyResultDataAccessException e) {
-            // Aucun résultat trouvé, retourner un Optional vide
             return Optional.empty();
         }
     }

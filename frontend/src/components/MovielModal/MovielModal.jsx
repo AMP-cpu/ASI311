@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "./MovieModal.css";
 
-export const MovieModal = ({ selectedMovie, closeModal, isAdmin, favoriteMovies, setFavoriteMovies  }) => {
+export const MovieModal = ({
+  selectedMovie,
+  closeModal,
+  isAdmin,
+  favoriteMovies,
+  setFavoriteMovies,
+}) => {
   const userId = localStorage.getItem("userId");
   const [isFavorite, setIsFavorite] = useState(false);
   const [averageRating, setAverageRating] = useState(null);
@@ -24,7 +30,9 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin, favoriteMovies,
 
   const fetchFavoriteStatus = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/film/favorite/${selectedMovie.id}/${userId}`);
+      const response = await fetch(
+        `http://localhost:8080/film/favorite/${selectedMovie.id}/${userId}`
+      );
       if (!response.ok) {
         console.error("Failed to fetch favorite status:", response.statusText);
         return;
@@ -38,7 +46,9 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin, favoriteMovies,
 
   const fetchAverageRating = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/film/note/average/${selectedMovie.id}`);
+      const response = await fetch(
+        `http://localhost:8080/film/note/average/${selectedMovie.id}`
+      );
       if (!response.ok) {
         console.error("Failed to fetch average rating:", response.statusText);
         return;
@@ -52,7 +62,9 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin, favoriteMovies,
 
   const fetchPersonalRating = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/film/note/personal/${selectedMovie.id}/${userId}`);
+      const response = await fetch(
+        `http://localhost:8080/film/note/personal/${selectedMovie.id}/${userId}`
+      );
       if (!response.ok) {
         console.error("Failed to fetch personal rating:", response.statusText);
         return;
@@ -65,26 +77,28 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin, favoriteMovies,
   };
 
   const handleFavoriteToggle = async () => {
-    const isCurrentlyFavorite = favoriteMovies.some((movie) => movie.id === selectedMovie.id);
+    const isCurrentlyFavorite = favoriteMovies.some(
+      (movie) => movie.id === selectedMovie.id
+    );
     const newFavoriteList = isCurrentlyFavorite
-      ? favoriteMovies.filter((movie) => movie.id !== selectedMovie.id)  
-      : [...favoriteMovies, selectedMovie];  
-  
-    setFavoriteMovies(newFavoriteList);  
-  
+      ? favoriteMovies.filter((movie) => movie.id !== selectedMovie.id)
+      : [...favoriteMovies, selectedMovie];
+
+    setFavoriteMovies(newFavoriteList);
+
     try {
       const method = isCurrentlyFavorite ? "DELETE" : "POST";
       const response = await fetch(
         `http://localhost:8080/film/favorite/${selectedMovie.id}/${userId}`,
         { method }
       );
-  
+
       if (!response.ok) {
         throw new Error("Failed to update favorite status");
       }
     } catch (error) {
       console.error("Error updating favorite status:", error);
-      setFavoriteMovies(favoriteMovies);  
+      setFavoriteMovies(favoriteMovies);
     }
   };
 
@@ -116,8 +130,14 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin, favoriteMovies,
 
   return (
     <div className="modal-overlay" onClick={closeModal}>
-      <div className="modal-content" style={{ backgroundImage: `url(${selectedMovie.Poster})` }} onClick={(e) => e.stopPropagation()}>
-        <span className="close-btn" onClick={closeModal}>&times;</span>
+      <div
+        className="modal-content"
+        style={{ backgroundImage: `url(${selectedMovie.Poster})` }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <span className="close-btn" onClick={closeModal}>
+          &times;
+        </span>
 
         <div className="modal-info">
           <h2>
@@ -127,7 +147,11 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin, favoriteMovies,
         </div>
 
         <div className="modal-body">
-          <img src={selectedMovie.Poster} alt={selectedMovie.Title} className="modal-poster" />
+          <img
+            src={selectedMovie.Poster}
+            alt={selectedMovie.Title}
+            className="modal-poster"
+          />
           <div className="synopsis">
             <p>{selectedMovie.Plot === "N/A" ? "" : selectedMovie.Plot}</p>
 
@@ -141,30 +165,55 @@ export const MovieModal = ({ selectedMovie, closeModal, isAdmin, favoriteMovies,
             </div>
 
             <div className="ratings">
-              <p>⭐ Average Rating: {averageRating !== null ? averageRating : "No ratings yet"}</p>
-              <p>⭐ Your Rating: {personalRating !== null ? personalRating : "You haven't rated this movie yet"}</p>
+              <p>
+                ⭐ Average Rating:{" "}
+                {averageRating !== null ? averageRating : "No ratings yet"}
+              </p>
+              <p>
+                ⭐ Your Rating:{" "}
+                {personalRating !== null
+                  ? personalRating
+                  : "You haven't rated this movie yet"}
+              </p>
 
               <div className="rating-input">
                 <label>Enter your rating (0-20):</label>
                 <input
+                  className="rating-input-number"
                   type="number"
-                  min="0"
-                  max="20"
                   value={newRating}
-                  onChange={(e) => setNewRating(e.target.value)}
+                  onChange={(e) => {
+                    if (
+                      e.target.value === "" ||
+                      (parseInt(e.target.value) >= 0 &&
+                        parseInt(e.target.value) <= 20)
+                    )
+                      setNewRating(e.target.value);
+                  }}
                   placeholder={personalRating !== null ? personalRating : ""}
                 />
-                <button onClick={handleRatingSubmit}>Submit Rating</button>
+                <button
+                  className="submit-rating-button"
+                  onClick={handleRatingSubmit}
+                >
+                  🍿Submit Rating!🍿
+                </button>
               </div>
             </div>
 
             <div className="icon-buttons">
-              <button className="icon-btn bookmark-btn" onClick={handleFavoriteToggle}>
+              <button
+                className="icon-btn bookmark-btn"
+                onClick={handleFavoriteToggle}
+              >
                 {isFavorite ? "💖 Remove Favorite" : "🔖 Add to Favorites"}
               </button>
 
               {isAdmin && isFavorite && (
-                <button className="icon-btn delete-btn" onClick={handleFavoriteToggle}>
+                <button
+                  className="icon-btn delete-btn"
+                  onClick={handleFavoriteToggle}
+                >
                   ❌ Remove (Admin)
                 </button>
               )}

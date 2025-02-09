@@ -45,9 +45,11 @@ export const Login = ({ onClose }) => {
         setErrorMessage(text || "An error occurred");
         return;
       }
+      console.log(data)
 
       if (response.ok) {
         localStorage.setItem("userId", data.id);
+        localStorage.setItem("is_admin", data.admin);
         console.log(data.id)
         navigate("/accueil");
       } else {

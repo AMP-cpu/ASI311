@@ -14,35 +14,44 @@ export const Accueil = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    axios.get("http://localhost:8080/film")
-      .then(response => {
+    axios
+      .get("http://localhost:8080/film")
+      .then((response) => {
         setMovies(response.data);
-        response.data.forEach(movie => fetchMovieDetails(movie.titre));
+        response.data.forEach((movie) => fetchMovieDetails(movie.titre));
       })
-      .catch(error => console.error("Error fetching movies:", error));
+      .catch((error) => console.error("Error fetching movies:", error));
 
-    axios.get(`http://localhost:8080/film/favorite/${userId}`)
-      .then(response => {
+    axios
+      .get(`http://localhost:8080/film/favorite/${userId}`)
+      .then((response) => {
         setFavoriteMovies(response.data);
-        response.data.forEach(movie => fetchMovieDetails(movie.titre));
+        response.data.forEach((movie) => fetchMovieDetails(movie.titre));
       })
-      .catch(error => console.error("Error fetching favorite movies:", error));
+      .catch((error) =>
+        console.error("Error fetching favorite movies:", error)
+      );
   }, []);
 
   const fetchMovieDetails = async (movieTitle) => {
     try {
       const response = await axios.get(
-        `https://www.omdbapi.com/?apikey=${API_KEY}&t=${encodeURIComponent(movieTitle)}`
+        `https://www.omdbapi.com/?apikey=${API_KEY}&t=${encodeURIComponent(
+          movieTitle
+        )}`
       );
       if (response.data.Response === "True") {
-        setOmdbData(prevData => ({ ...prevData, [movieTitle]: response.data }));
+        setOmdbData((prevData) => ({
+          ...prevData,
+          [movieTitle]: response.data,
+        }));
       }
     } catch (error) {
       console.error("Error fetching movie details:", error);
     }
   };
 
-  const filteredMovies = movies.filter(movie =>
+  const filteredMovies = movies.filter((movie) =>
     movie.titre.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -67,10 +76,18 @@ export const Accueil = () => {
       <h2>Movies</h2>
       <div className="movie-carousel">
         {filteredMovies.length > 0 ? (
-          filteredMovies.map(movie => (
-            <div key={movie.id} className="movie-card" onClick={() => handleMovieClick(movie)}>
+          filteredMovies.map((movie) => (
+            <div
+              key={movie.id}
+              className="movie-card"
+              onClick={() => handleMovieClick(movie)}
+            >
               {omdbData[movie.titre]?.Poster ? (
-                <img src={omdbData[movie.titre].Poster} alt={movie.titre} className="movie-poster" />
+                <img
+                  src={omdbData[movie.titre].Poster}
+                  alt={movie.titre}
+                  className="movie-poster"
+                />
               ) : (
                 <div className="placeholder">No Image Available</div>
               )}
@@ -85,10 +102,18 @@ export const Accueil = () => {
       <h2>Favorite Movies</h2>
       <div className="movie-carousel">
         {favoriteMovies.length > 0 ? (
-          favoriteMovies.map(movie => (
-            <div key={movie.id} className="movie-card" onClick={() => handleMovieClick(movie)}>
+          favoriteMovies.map((movie) => (
+            <div
+              key={movie.id}
+              className="movie-card"
+              onClick={() => handleMovieClick(movie)}
+            >
               {omdbData[movie.titre]?.Poster ? (
-                <img src={omdbData[movie.titre].Poster} alt={movie.titre} className="movie-poster" />
+                <img
+                  src={omdbData[movie.titre].Poster}
+                  alt={movie.titre}
+                  className="movie-poster"
+                />
               ) : (
                 <div className="placeholder">No Image Available</div>
               )}
@@ -100,7 +125,10 @@ export const Accueil = () => {
         )}
       </div>
 
-      <MovieModal selectedMovie={selectedMovie} closeModal={() => setSelectedMovie(null)} />
+      <MovieModal
+        selectedMovie={selectedMovie}
+        closeModal={() => setSelectedMovie(null)}
+      />
     </div>
   );
 };

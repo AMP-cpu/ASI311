@@ -18,7 +18,7 @@ export const Navbar = () => {
         <nav>
           <ul>
             <li>
-              <a href="/home">Home</a>
+              <a href="/accueil">Home</a>
             </li>
             <li
               className="user-tab"

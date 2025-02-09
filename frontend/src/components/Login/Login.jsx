@@ -48,6 +48,7 @@ export const Login = ({ onClose }) => {
       console.log(data)
 
       if (response.ok) {
+        console.log(data)
         localStorage.setItem("userId", data.id);
         localStorage.setItem("is_admin", data.admin);
         console.log(data.id)

@@ -17,9 +17,9 @@ export const Navbar = () => {
         <a href="/" className="logo"></a>
         <nav>
           <ul>
-            <li>
-              <a href="/home">Home</a>
-            </li>
+            {/* <li>
+              <a href="/a">Home</a>
+            </li> */}
             <li
               className="user-tab"
               onMouseEnter={() => setShowDropdown(true)}
